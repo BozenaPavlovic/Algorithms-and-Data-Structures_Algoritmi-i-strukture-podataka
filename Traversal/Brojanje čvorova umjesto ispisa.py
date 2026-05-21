@@ -24,3 +24,13 @@ def count_nodes(self, node=None, traversaltype='in'):
         return (self.count_nodes(node.left, traversaltype) 
                 + self.count_nodes(node.right, traversaltype) 
                 + 1)
+
+
+# TEST
+bst = BST()
+for broj in [50, 30, 70, 20, 40, 60, 80]:
+    bst.insert(broj)
+
+print("Broj čvorova (pre):", bst.count_nodes(traversal_type='pre'))   # 7
+print("Broj čvorova (in):", bst.count_nodes(traversal_type='in'))     # 7
+print("Broj čvorova (post):", bst.count_nodes(traversal_type='post')) # 7
