@@ -28,3 +28,17 @@ def traverse(self, node=None, result=None, traversal_type='in'):
         result.append(node.key)
     
     return result
+
+
+
+
+# TEST
+if __name__ == "__main__":
+    bst = BST()
+    # Dodajemo čvorove (primjer stabla)
+    for broj in [50, 30, 70, 20, 40, 60, 80]:
+        bst.insert(broj)
+    
+    print("In-order (uzlazno):", bst.traverse(traversal_type='in'))     # [20, 30, 40, 50, 60, 70, 80]
+    print("Pre-order:", bst.traverse(traversal_type='pre'))             # [50, 30, 20, 40, 70, 60, 80]
+    print("Post-order:", bst.traverse(traversal_type='post'))           # [20, 40, 30, 60, 80, 70, 50]
