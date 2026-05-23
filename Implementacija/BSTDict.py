@@ -35,7 +35,7 @@ class BSTDict:
         current = self.root
         while current is not None:
             if current.key == key:
-                return value
+                return current.value
             elif key < current.key:
                 current = current.left
             else:
@@ -71,16 +71,30 @@ class BSTDict:
         
       # Case 2: Node has two children
       elif current.left and current.right:
-        successor_parent  = current
-        successor = current.right
-        while successor.left is not None:
-          successor_parent = successor
-          successor = successor.left
-        current
+          successor_parent = current
+          successor = current.right
+          while successor.left is not None:
+              successor_parent = successor
+              successor = successor.left
 
+          current.key = successor.key
+          current.value = successor.value
+          if successor_parent.left == successor:
+              successor_parent.left = successor.right
+          else:
+              successor_parent.right = successor.right
+        
   
       # Case 3: Node has one child
-
+      else:
+          child = current.left if current.left else current.right
+          if current != self.root:
+              if current == parent.left:
+                  parent.left = child
+              else:
+                  parent.right = child
+          else:
+              self.root = child
 
     def in_order_traversal(self, node=None, result=None):
 
