@@ -4,11 +4,18 @@ class HashTable:
         self.table = [[] for _ in range(size)]
 
     def hash_function(self, key):
+        hash_value = 5381
+        
     # Broj 5381 je početni prosti broj iz poznatog 'djb2' algoritma za hashiranje stringova
     # Koristi se zato što prosti brojevi matematički drastično smanjuju šanse za kolizije 
     # (da dva različita stringa dobiju isti indeks) i osiguravaju da se ključevi 
     # ravnomjerno rasporede po cijeloj tablici
-        hash_value = 5381
+        
+
+    # Operacija '<< 5' pomiče bitove broja za 5 mjesta ulijevo, što je u računalnoj matematici 
+    # isto što i množenje broja s 32. Dodavanjem 'hash_value' na to zapravo množimo broj s 33
+    # To se radi jer je računalima puno brže raditi s bitovima nego klasično množiti, 
+    # a broj 33 u kombinaciji s 5381 daje savršeno izmiješane (raspršene) indekse
         
         for char in key:
             hash_value = ((hash_value << 5) + hash_value) + ord(char)
