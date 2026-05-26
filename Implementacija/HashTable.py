@@ -1,28 +1,11 @@
 class HashTable:
     def __init__(self, size):
-        """
-        Inicijalizacija hash tablice.
-        
-        Args:
-            size: Veličina tablice (broj bucket-a)
-        """
-        self.size = size
+        self.size = size #Veličina tablice (broj bucket-a)
         # Kreiramo listu praznih listi za svaki bucket
         # Ovo je osnova za lančano rješavanje kolizija (chaining)
         self.table = [[] for _ in range(size)]
     
     def hash_function(self, key):
-        """
-        Hash funkcija koja pretvara string ključ u indeks tablice.
-        Koristi popularnu djb2 hash funkciju za bolju distribuciju.
-        
-        Args:
-            key: String ključ koji se hashira
-            
-        Returns:
-            Indeks u tablici (cijeli broj između 0 i size-1)
-        """
-        # Početna hash vrijednost (za djb2 algoritam)
         hash_value = 5381
         
         # Za svaki znak u ključu:
@@ -35,14 +18,6 @@ class HashTable:
         return hash_value % self.size
     
     def put(self, key, value):
-        """
-        Umeće ili ažurira ključ-vrijednost par u hash tablicu.
-        
-        Args:
-            key: Ključ (string)
-            value: Vrijednost koja se pohranjuje
-        """
-        # Izračunamo indeks pomoću hash funkcije
         index = self.hash_function(key)
         
         # Dohvatimo bucket (listu) na izračunatom indeksu
@@ -59,15 +34,7 @@ class HashTable:
         bucket.append((key, value))
     
     def get(self, key):
-        """
-        Pretražuje hash tablicu i vraća vrijednost za zadani ključ.
-        
-        Args:
-            key: Ključ koji se traži (string)
-            
-        Returns:
-            Vrijednost pridružena ključu ili None ako ključ ne postoji
-        """
+       
         # Izračunamo indeks pomoću hash funkcije
         index = self.hash_function(key)
         
@@ -83,12 +50,7 @@ class HashTable:
         return None
     
     def delete(self, key):
-        """
-        Briše ključ-vrijednost par iz hash tablice.
-        
-        Args:
-            key: Ključ koji se briše (string)
-        """
+    
         # Izračunamo indeks pomoću hash funkcije
         index = self.hash_function(key)
         
@@ -105,13 +67,6 @@ class HashTable:
         # Ako ključ ne postoji, ne radimo ništa (ili možemo podići iznimku)
     
     def items(self):
-        """
-        Vraća popis svih ključ-vrijednost parova u hash tablici.
-        
-        Returns:
-            Lista tuple-ova (key, value) za sve elemente u tablici
-        """
-        result = []
         
         # Prolazimo kroz sve buckete
         for bucket in self.table:
@@ -121,9 +76,6 @@ class HashTable:
         return result
     
     def __str__(self):
-        """
-        Tekstualni prikaz hash tablice (za lakši debugging).
-        """
         result = ""
         for i, bucket in enumerate(self.table):
             if bucket:
