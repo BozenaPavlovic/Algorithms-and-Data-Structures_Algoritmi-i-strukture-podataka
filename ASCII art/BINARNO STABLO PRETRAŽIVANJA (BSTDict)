@@ -26,10 +26,10 @@ Algoritam na papiru:
 2. OPERACIJA: SEARCH (Pretraživanje)
 ================================================================================
 Najjednostavnija operacija. Kreće od korijena i "šeta" kroz stablo:
-  * Ako je `ključ == current.key` -> Našli smo! Vrati vrijednost (`value`).
-  * Ako je `ključ < current.key`  -> Skrećemo LIJEVO.
-  * Ako je `ključ > current.key`  -> Skrećemo DESNO.
-  * Ako dođemo do `None` (ćorsokak) -> Ključ ne postoji u stablu, vrati `None`.
+  * Ako je `ključ == current.key` -> Našli smo! Vrati vrijednost (`value`)
+  * Ako je `ključ < current.key`  -> Skrećemo LIJEVO
+  * Ako je `ključ > current.key`  -> Skrećemo DESNO
+  * Ako dođemo do `None`          -> Ključ ne postoji u stablu, vrati `None`
 
 ================================================================================
 3. OPERACIJA: DELETE (Brisanje) - NAJKOMPLICIRANIJI DIO (3 CASE-a)
