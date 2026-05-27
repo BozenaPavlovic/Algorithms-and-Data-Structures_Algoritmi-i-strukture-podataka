@@ -1,0 +1,116 @@
+================================================================================
+           BINARNO STABLO PRETRAŽIVANJA (BSTDict) - MEHANIKA I PRAVILA
+================================================================================
+
+GLAVNO PRAVILO STABLA (Invarijanta BST-a):
+Za svaki čvor u stablu vrijedi:
+  * Svi ključevi u NJEGOVOM LIJEVOM podstablu moraju biti MANJI od njegovog ključa.
+  * Svi ključevi u NJEGOVOM DESNOM podstablu moraju biti VEĆI od njegovog ključa.
+  * Ako su ključevi stringovi, uspoređuju se abecedno (leksikografski).
+
+================================================================================
+1. OPERACIJA: INSERT (Umetanje / Ažuriranje)
+================================================================================
+Tvoj kod koristi petlju `while True` i kreće od korijena (`self.root`).
+
+Algoritam na papiru:
+  1. Ako je stablo prazno, novi čvor postaje `root`.
+  2. Ako je novi ključ MANJI od trenutnog -> idi LIJEVO.
+     - Ako je lijevo prazno, tu umetni čvor i prekini (`break`).
+  3. Ako je novi ključ VEĆI od trenutnog -> idi DESNO.
+     - Ako je desno prazno, tu umetni čvor i prekini (`break`).
+  4. Ako je ključ JEDNAK trenutnom -> samo pregazi staru vrijednost novom 
+     (Ažuriranje: npr. povećavanje brojača riječi s 1 na 2).
+
+================================================================================
+2. OPERACIJA: SEARCH (Pretraživanje)
+================================================================================
+Najjednostavnija operacija. Kreće od korijena i "šeta" kroz stablo:
+  * Ako je `ključ == current.key` -> Našli smo! Vrati vrijednost (`value`).
+  * Ako je `ključ < current.key`  -> Skrećemo LIJEVO.
+  * Ako je `ključ > current.key`  -> Skrećemo DESNO.
+  * Ako dođemo do `None` (ćorsokak) -> Ključ ne postoji u stablu, vrati `None`.
+
+================================================================================
+3. OPERACIJA: DELETE (Brisanje) - NAJKOMPLICIRANIJI DIO (3 CASE-a)
+================================================================================
+Kod brisanja prvo moramo pronaći čvor koji brišemo (`current`) i njegovog 
+roditelja (`parent`). Kada ga nađemo, tvoj kod rješava problem kroz 3 slučaja:
+
+--------------------------------------------------------------------------------
+CASE 1: Čvor nema djece (List / Leaf node)
+--------------------------------------------------------------------------------
+Ovo je najlakši slučaj. Čvor se jednostavno "odreže" iz stabla.
+
+Vizualni prikaz (Brišemo [15]):
+      [12]                      [12]
+         \         --->            \
+         [15] X                     None
+
+Pravilo u kodu: Roditeljeva poveznica (`parent.left` ili `parent.right`) koja 
+je pokazivala na `current` se postavlja na `None`.
+
+--------------------------------------------------------------------------------
+CASE 2: Čvor ima DVA djeteta (Most complex case)
+--------------------------------------------------------------------------------
+Ne možemo samo obrisati čvor jer bismo prekinuli stablo na pola. Moramo naći 
+njegovu "zamjenu" (sukcesora) koja neće narušiti abecedni red.
+*Sukcesor je NAJMANJI element u njegovom DESNOM podstablu.*
+
+Vizualni prikaz (Brišemo korijen [18]):
+                      [18] X  <-- Brišemo ga. Sukcesor je najljevlji u desnom 
+                     /    \       podstablu, a to je broj [22].
+                  [7]      [25] 
+                          /    \
+                        [22]   [31]
+
+Koraci u kodu:
+  1. Idi jednom DESNO (na 25), pa skroz LIJEVO dokle god možeš (tako nađeš 22).
+  2. Kopiraj ključ i vrijednost sukcesora (22) u čvor koji brišeš (tamo gdje je bio 18).
+  3. Izbriši originalni čvor sukcesora (pošto je on bio na dnu, on je sad ili CASE 1 ili CASE 3).
+
+Rezultat nakon brisanja:
+                      [22]  <-- Uspješno zamijenio 18
+                     /    \
+                  [7]      [25]
+                             \
+                             [31]
+
+--------------------------------------------------------------------------------
+CASE 3: Čvor ima TOČNO JEDNO dijete (Lijevo ILI Desno)
+--------------------------------------------------------------------------------
+Ovaj slučaj se slikovito zove "preskakanje". Element koji brišemo samo izbacimo, 
+a njegovo jedino dijete "posvoji" njegov roditelj (djed tog djeteta).
+
+Vizualni prikaz (Brišemo [7], njegovo jedino dijete je [4]):
+
+            [18]                      [18]
+           /                         /
+         [7] X       --->          [4]
+         /
+       [4]
+
+Pravilo u kodu: `parent.left` ili `parent.right` se spaja izravno na `child`, 
+preskačući `current`.
+
+================================================================================
+                     ŠTO ASISTENTI TRAŽE NA PAPIRU?
+================================================================================
+
+1. Zamka kod sukcesora (CASE 2): 
+   Uvijek zapamti definiciju sukcesora: "Idi jednom desno, pa onda skroz lijevo 
+   dokle god ima grana". Ako odmah na tom prvom desnom čvoru nema lijeve grane, 
+   onda je taj desni čvor sam po sebi sukcesor!
+
+2. Vremenske složenosti u najboljem i najgorem slučaju:
+   +-----------------------+-------------------+-------------------+
+   | Operacija             | Prosjek (Balanced)| Najgori (Skewed)  |
+   +-----------------------+-------------------+-------------------+
+   | Search / Insert / Del |    O(log n)       |       O(n)        |
+   +-----------------------+-------------------+-------------------+
+
+3. Zašto je In-order traversal rekurzivan?
+   Zato što stablo ima fraktalnu (rekurzivnu) strukturu. Svaki čvor je zapravo 
+   korijen nekog manjeg podstabla. Funkcija prvo pozove samu sebe za lijevo 
+   podstablo, pa zapiše trenutni čvor, pa pozove samu sebe za desno podstablo.
+================================================================================
