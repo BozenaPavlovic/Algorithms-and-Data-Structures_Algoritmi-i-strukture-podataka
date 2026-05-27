@@ -1,0 +1,109 @@
+================================================================================
+           HASH TABLICA (HashTable) - MEHANIKA, KOLIZIJE I ZAMKE
+================================================================================
+
+OSNOVNI POJMOVI ZA ISPIT:
+  1. Hash funkcija: Pretvara ključ (string) u cijeli broj (indeks). U tvom kodu 
+     to je 'djb2' algoritam s modulo operatorom (% self.size).
+  2. Bucket (Pretinac): Indeks u početnoj listi. Tvoja tablica je zapravo "lista listi".
+  3. Kolizija: Situacija kada dva potpuno različita stringa daju ISTI indeks.
+  4. Ulančavanje (Chaining): Rješavanje kolizija tako da unutar istog pretinca 
+     dodajemo elemente u niz (povezanu listu) jedan iza drugoga.
+
+================================================================================
+ŠKAKLJIVA SITUACIJA 1: KAKO SE "RUČNO" RAČUNA INDEKS? (Matematika na papiru)
+================================================================================
+Na pismenom ispitu profesor ti neće dati da računaš komplicirani 'djb2' u glavi, 
+nego će ti dati jednostavnu hash funkciju, na primjer:
+"Zbroj ASCII vrijednosti znakova modulo veličina tablice (size=10)".
+
+Uzmimo riječ "apple":
+  * ord('a') = 97
+  * ord('p') = 112
+  * ord('p') = 112
+  * ord('l') = 108
+  * ord('e') = 101
+  * Ukupni zbroj = 97 + 112 + 112 + 108 + 101 = 530
+  * Indeks = 530 % 10 = 0 -> Riječ "apple" ide u pretinac 0!
+
+ZAMKA: Obrati pažnju na velika i mala slova! ord('A') je 65, a ord('a') je 97. 
+Ako ne pretvoriš string u `.lower()`, dobit ćeš potpuno krivu poziciju u tablici!
+
+================================================================================
+ŠKAKLJIVA SITUACIJA 2: KAKO IZGLEDA "ULANČAVANJE" NAKON KOLIZIJE?
+================================================================================
+Što ako ubacujemo riječi, a tvoja hash funkcija izbaci iste indekse?
+Uzmimo da imamo tablicu veličine 5 (`size=5`) i u nju ubacujemo ovim redom:
+  1. put("apple", 1)   -> hash izračuna indeks 2
+  2. put("banana", 2)  -> hash izračuna indeks 4
+  3. put("cherry", 3)  -> hash izračuna indeks 2  (KOLIZIJA!)
+  4. put("orange", 4)  -> hash izračuna indeks 2  (KOLIZIJA!)
+
+Kako to crtaš na papiru (vjerna skica tvog koda):
+* Tvoj kod radi `.append((key, value))` na kraj tog bstepena (bucketa) ako ključ ne postoji.
+
+Indeks | Sadržaj pretinca (Bucket) / Lanac ulančavanja
+--------------------------------------------------------------------------------
+  0    | []
+  1    | []
+  2    | [("apple", 1)] -> [("cherry", 3)] -> [("orange", 4)]  <-- Lanac kolizija
+  3    | []
+  4    | [("banana", 2)]
+
+================================================================================
+ŠKAKLJIVA SITUACIJA 3: RAZLIKA IZMEĐU UMETAJNJA I AŽURIRANJA (PUT metoda)
+================================================================================
+Ovo je ključna petlja u tvojoj metodi `put`:
+for i, (existing_key, existing_value) in enumerate(bucket):
+    if existing_key == key:
+        bucket[i] = (key, value) # Ažuriranje!
+        return
+
+Ispitni scenarij: U tablicu iz gornjeg primjera ponovno pošaljemo: put("cherry", 10).
+  * Algoritam ode na indeks 2.
+  * Prolazi kroz lanac: vidi "apple" (nije isti ključ), vidi "cherry" (ISTI JE KLJUČ!).
+  * Na papiru NE DODIJELEŠ novi element na kraj, nego unutar postojećeg para 
+    samo promijeniš brojku u 10. Duljina lanca ostaje ista!
+
+  2    | [("apple", 1)] -> [("cherry", 10)] -> [("orange", 4)]
+
+================================================================================
+ŠKAKLJIVA SITUACIJA 4: KAKO RADI BRISANJE (DELETE) IZ LANCA?
+================================================================================
+Tvoja metoda `delete` koristi naredbu `del bucket[i]`. 
+
+Ispitni scenarij: Obriši "cherry" iz gornje tablice.
+  * Algoritam izračuna indeks 2.
+  * Prođe kroz listu na indeksu 2, nađe "cherry" na poziciji i=1.
+  * Briše ga. Elementi iza njega se u Python listi automatski pomiču ulijevo.
+
+Nakon brisanja:
+  2    | [("apple", 1)] -> [("orange", 4)]
+
+ZAMKA: Česta greška na papiru je da ljudi obrišu "cherry", pa "orange" ostane 
+odrezan u zraku. Ne, lanac se mora ponovno spojiti (što Python radi sam za sebe)!
+
+================================================================================
+           TEORETSKA ISPITNA PITANJA (Što će te profesor pitati?)
+================================================================================
+
+Pitanje 1: Koja je vremenska složenost operacija u HashTable u NAJBOLJEM slučaju?
+Odgovor: O(1) - Konstantno vrijeme. Hash funkcija odmah izračuna indeks i tamo 
+         nema nikoga (ili ima jako malo elemenata), pa odmah dohvaćamo podatak.
+
+Pitanje 2: Koja je vremenska složenost u NAJGOREM slučaju (Worst case)?
+Odgovor: O(n) - Linearno vrijeme. To se događa ako je hash funkcija LOŠA pa svi 
+         elementi završe na ISTOM indeksu (u jednom ogromnom lancu). Tada se 
+         hash tablica degradira u običnu povezanu listu kroz koju moramo šetati.
+
+Pitanje 3: Zašto je broj 5381 u 'djb2' algoritmu važan?
+Odgovor: To je magični prosti broj (prime number). Prosti brojevi u hash 
+         algoritmima matematički pomažu da se stringovi koji su slični 
+         (npr. "kod", "rok", "bok") rasprše na potpuno različite indekse, 
+         čime se drastično smanjuje broj kolizija.
+
+Pitanje 4: Što je to "Faktor opterećenja" (Load Factor)?
+Odgovor: To je omjer broja elemenata (N) i veličine tablice (M), odnosno λ = N / M. 
+         U tvom labosu s Kiklopom, λ = 4937 / 1000 = 4.93. To znači da je u 
+         prosjeku svaki tvoj bucket imao lanac od oko 5 riječi.
+================================================================================
