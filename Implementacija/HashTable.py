@@ -23,6 +23,12 @@ class HashTable:
 
     def put(self, key, value):
         index = self.hash_function(key)
+
+        # 'bucket' je zapravo podlista na određenom indeksu u kojoj rješavamo kolizije (ulančavanje)
+        # Funkciju 'enumerate' koristimo kako bismo istovremeno dobili i indeks (i) i sam par (ključ, vrijednost)
+        # Ako u petlji pronađemo da ključ već postoji, odmah ga ažuriramo na tom indeksu 'i' i prekidamo funkciju 
+        # s 'return' kako ne bismo bezveze vrtjeli petlju do kraja ili dodali dupli ključ
+        
         bucket = self.table[index]
         for i, (existing_key, existing_value) in enumerate(bucket):
             if existing_key == key:
@@ -50,6 +56,11 @@ class HashTable:
     def items(self):
         result = []
         for bucket in self.table:
+            
+            # Umjesto običnog '.append()' koji bi nam u rezultat ubacio cijele podliste (pa bismo dobili listu listi),
+        # ovdje koristimo '.extend()'. Ta metoda uzima elemente iz svakog pojedinačnog 'bucketa' (pretinca)
+        # i "raspakirava" ih izravno u našu glavnu 'result' listu, stvarajući jedan ravan, čisti popis svih parova
+            
             result.extend(bucket)
         return result
 
