@@ -1,0 +1,72 @@
+================================================================================
+           USPOREDBA IMPLEMENTACIJA (BSTDict vs HashTable) - ANALIZA
+================================================================================
+
+1. REZULTATI TVOG TESTA (Na uzorku od 12,149 riječi / 4,937 unikatnih)
+--------------------------------------------------------------------------------
+  * Vrijeme izvođenja s BSTDict:    0.0396 sekundi
+  * Vrijeme izvođenja s HashTable:  0.0337 sekundi
+
+Zaključak s mjerenja: HashTable je nadmašila BSTDict. Iako se radi o milisekundama 
+koje ljudsko oko ne primjećuje, matematička i strukturalna razlika je ogromna.
+
+================================================================================
+2. ZAŠTO JE HASH TABLICA BRŽA? (Dubinska analiza za bodove)
+================================================================================
+
+A) Mehanika HashTable:
+  - Kada tvoj kod broji riječ (npr. "melkior"), HashTable odmah računa njezin 
+    indeks preko djb2 funkcije.
+  - To se događa u KONSTANTNOM VREMENU O(1). Bez obzira imala tablica 10 ili 
+    100,000 riječi, računanje indeksa traje jednako brzo.
+  - Jedino usporavanje su kolizije (ulančavanje). Pošto je veličina bila 1000, 
+    a unikatnih riječi ~5000, prosječni lanac je dug oko 5 elemenata. Pretraživanje 
+    unutar tog kratkog lanca je zanemarivo brzo.
+
+B) Mehanika BSTDict:
+  - Kada BSTDict traži ili umeta riječ, on mora krenuti od korijena (root) i 
+    raditi abecedne usporedbe (manje-lijevo, veće-desno).
+  - To se događa u LOGARITAMSKOM VREMENU O(log n). 
+  - Za ~5000 unikatnih riječi, stablo ima oko log2(4937) ≈ 12 do 13 razina. To znači 
+    da algoritam za svaku riječ mora napraviti i do 13 "skokova" kroz memoriju 
+    kako bi je postavio na mjesto. Zato je stablo malo sporije od hash tablice.
+
+================================================================================
+3. ŠTO AKO PUSTIMO "MILIJUN" RIJEČI? (Najčešće teorijsko pitanje)
+================================================================================
+Profesori obožavaju pitati: "Što bi se dogodilo da umjesto 12,000 riječi pustimo 
+tekst od 10,000,000 riječi?".
+
+Odgovor za HashTable:
+  - Ako veličina tablice ostane fiksna (size=1000), a broj riječi drastično 
+    naraste, lanci ulančavanja će postati OGROMNI (npr. tisuće riječi po jednom indeksu).
+  - U tom slučaju, HashTable gubi svoju O(1) brzinu i degradira se u O(n) jer 
+    zapravo pretražuješ ogromne linearne liste.
+  - RJEŠENJE: U stvarnom programiranju koristi se "Dynamic Resizing" (kod ugrađenog 
+    Python dict-a) — kada se tablica napuni preko 70%, njezina veličina se automatski 
+    dupla, a elementi se ponovno hashiraju (Rehash), čime se čuva O(1) brzina.
+
+Odgovor za BSTDict:
+  - Kod stabla, s rastom elemenata raste i njegova dubina. Za milijun riječi dubina 
+    bi bila oko 20 razina (log2(1,000,000) ≈ 20). 
+  - Stablo bi i dalje radilo stabilno, OSIM ako podaci ne dođu sortirani abecedno 
+    (tada se pretvara u degenerirano stablo i degradira na loših O(n)).
+
+================================================================================
+          ZAVRŠNI PREGLED SLOŽENOSTI ZA GitHub (The Ultimate Matrix)
+================================================================================
+
++------------------------+-------------------+---------------------------------+
+| Struktura              | Vremenska (Prosjek)| Najgori mogući scenarij (Worst) |
++------------------------+-------------------+---------------------------------+
+| BSTDict                |    O(log n)       | O(n) (Ubacivanje po abecedi)    |
+| HashTable (Chaining)   |    O(1)           | O(n) (Sve riječi na istom indexu)|
++------------------------+-------------------+---------------------------------+
+
+Glavna prednost BSTDict-a nad HashTable:
+  - BSTDict može u svakom trenutku vratiti podatke u SAVRŠENOM ABECEDNOM REDU 
+    pomoću In-order obilaska.
+  - HashTable podatke drži potpuno "razbacane" po indeksima (kako ih hash funkcija 
+    baci) i nema pojma o abecednom redu. Ako želiš ispisati HashTable po abecedi, 
+    moraš izvući sve elemente van i ručno ih sortirati, što troši dodatno vrijeme.
+================================================================================
