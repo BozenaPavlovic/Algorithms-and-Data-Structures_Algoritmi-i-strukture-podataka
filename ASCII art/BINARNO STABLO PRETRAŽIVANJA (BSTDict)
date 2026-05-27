@@ -35,7 +35,7 @@ Najjednostavnija operacija. Kreće od korijena i "šeta" kroz stablo:
 3. OPERACIJA: DELETE (Brisanje) - NAJKOMPLICIRANIJI DIO (3 CASE-a)
 ================================================================================
 Kod brisanja prvo moramo pronaći čvor koji brišemo (`current`) i njegovog 
-roditelja (`parent`). Kada ga nađemo, tvoj kod rješava problem kroz 3 slučaja:
+roditelja (`parent`). Kada ga nađemo:
 
 --------------------------------------------------------------------------------
 CASE 1: Čvor nema djece (List / Leaf node)
