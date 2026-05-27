@@ -1,0 +1,109 @@
+================================================================================
+           DEGENERIRANO STABLO (DEGENERATE / SKEWED BINARY TREE)
+================================================================================
+
+1. ŠTO JE DEGENERIRANO STABLO?
+--------------------------------------------------------------------------------
+Degenerirano stablo je specifičan oblik binarnog stabla pretraživanja (BST) u kojem 
+svaki roditeljski čvor ima MAKSIMALNO JEDNO dijete. 
+
+U praksi, ovo stablo potpuno gubi svoju strukturu "razgranatog stabla" i u memoriji 
+se ponaša i izgleda kao obična JEDNOSTRUKO POVEZANA LISTA (Linked List).
+
+2. KAKO NASTAJE? (Glavna ispitna zamka!)
+--------------------------------------------------------------------------------
+Degenerirano stablo nastaje kada elemente u BST umećemo u SAVRŠENOM REDOSLIJEDU:
+  * Strogo uzlazno (npr. abecedno: apple -> banana -> cherry -> date)
+  * Strogo silazno (npr. brojevi: 50 -> 40 -> 30 -> 20 -> 10)
+
+Budući da algoritam pri svakom umetanju provjerava je li novi element veći ili manji 
+od trenutnog, on će sve elemente slati isključivo na jednu stranu (uvijek lijevo 
+ili uvijek desno).
+
+================================================================================
+                    VIZUALNI PRIKAZ U MEMORIJI (ASCII ART)
+================================================================================
+
+Slučaj A: Desno-nagnuto stablo (Right-skewed)
+Unos elemenata (Uzlazno): "apple" -> "banana" -> "cherry" -> "date"
+
+  [apple]  <-- Korijen (Root)
+        \
+        [banana]
+              \
+              [cherry]
+                    \
+                    [date] <-- Najdublji list
+
+--------------------------------------------------------------------------------
+
+Slučaj B: Lijevo-nagnuto stablo (Left-skewed)
+Unos elemenata (Silazno): 50 -> 40 -> 30 -> 20
+
+      [50]  <-- Korijen (Root)
+     /
+   [40]
+   /
+ [30]
+ /
+[20] <-- Najdublji list
+
+================================================================================
+        OBILASCI DEGENERIRANOG STABLA (REDOSLIJED ISPISA NA PAPIRU)
+================================================================================
+Uzmimo za primjer Desno-nagnuto stablo (apple -> banana -> cherry -> date). 
+Evo kako se ponašaju algoritmi za obilazak i kojim točno redoslijedom ispisuju:
+
+--------------------------------------------------------------------------------
+1. IN-ORDER OBILAZAK (Lijevo -> Roditelj -> Desno)
+--------------------------------------------------------------------------------
+  * Kako radi: Ide skroz lijevo (nema nikoga), ispisuje trenutni, ide desno.
+  * Redoslijed ispisa: [apple, banana, cherry, date]
+  * Karakteristika: Identičan je početnom unosu jer In-order uvijek sortira BST.
+
+--------------------------------------------------------------------------------
+2. PRE-ORDER OBILAZAK (Roditelj -> Lijevo -> Desno)
+--------------------------------------------------------------------------------
+  * Kako radi: Odmah ispisuje trenutni čvor, provjerava lijevo (prazno), ide desno.
+  * Redoslijed ispisa: [apple, banana, cherry, date]
+  * Karakteristika: Kod DESNO-nagnutog stabla, Pre-order daje POTPUNO ISTI 
+    rezultat kao i In-order! (Česta trik pitalica na ispitima).
+
+--------------------------------------------------------------------------------
+3. POST-ORDER OBILAZAK (Lijevo -> Desno -> Roditelj)
+--------------------------------------------------------------------------------
+  * Kako radi: Pokuša ići lijevo (prazno), ide desno do kraja, pa ispisuje tek 
+    kada se vraća rekurzijom prema gore (od dna prema korijenu).
+  * Redoslijed ispisa: [date, cherry, banana, apple]
+  * Karakteristika: Daje potpuno OBRNUT redoslijed od početnog unosa.
+
+================================================================================
+             PROBLEM VREMENSKE SLOŽENOSTI (Zašto je ovo loše?)
+================================================================================
+Poanta korištenja BST-a je brzina. U dobro izbalansiranom stablu, operacije 
+pretraživanja, umetanja i brisanja traju O(log n) jer u svakom koraku eliminiramo 
+polovinu stabla.
+
+U degeneriranom stablu:
+  * Vremenska složenost skače na O(n) - LINEARNO VRIJEME.
+  * Ako tražimo riječ "date", tvoj kod mora proći kroz SVE čvorove u stablu, 
+    jednako kao da pretražuje običnu Python listu.
+  * Gubi se svaka prednost strukture stabla.
+
+================================================================================
+             ISPITNA PITANJA I TRIKOVI (Što profesor može pitati)
+================================================================================
+
+Pitanje 1: Koja je visina (dubina) degeneriranog stabla s 'N' elemenata?
+Odgovor: Visina je N (ili N-1, ovisno o tome broji li se korijen kao razina 0 ili 1). 
+Kod balansiranog stabla visina je log2(N).
+
+Pitanje 2: Ako su Pre-order i In-order ispisi nekog stabla POTPUNO IDENTIČNI, 
+           o kakvom se stablu radi?
+Odgovor: Radi se o čisto DESNO-nagnutom degeneriranom stablu (Right-skewed tree).
+
+Pitanje 3: Kako možemo spriječiti da stablo postane degenerirano?
+Odgovor: Korištenjem samobalansirajućih stabala (kao što su AVL stabla ili 
+         Crveno-crna stabla) koja automatski rotiraju čvorove pri umetanju 
+         kako bi stablo ostalo podjednake lijeve i desne visine.
+================================================================================
