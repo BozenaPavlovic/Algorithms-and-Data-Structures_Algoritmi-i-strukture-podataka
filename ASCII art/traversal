@@ -1,8 +1,5 @@
-
-
-
 ================================================================================
-                    STRUKTURA BINARNOG STABLA U MEMORIJI
+           STRUKTURA PROŠIRENOG BINARNOG STABLA U MEMORIJI (VEĆI PRIMJER)
 ================================================================================
 
                       [18]  <-- Glavni Korijen (Root)
@@ -13,71 +10,113 @@
                [4]  [12] [22]  [31]
                       \          \
                       [15]       [35]
+                      /  \       /  \
+                    [13] [16]  [33] [38]  <-- DODATNI RED (Najdublje dno)
 
 ================================================================================
 1. IN-ORDER OBILAZAK
 ================================================================================
 Pravilo: Lijevo podstablo -> Trenutni čvor (Roditelj) -> Desno podstablo
-Karakteristika: Kod BST-a, ovaj obilazak UVIJEK vraća savršeno sortirane brojeve.
+Zlatno pravilo ispitivanja: Kod ispravnog BST-a, rezultat na papiru UVIJEK mora
+biti savršeno numerički (ili abecedno) sortiran od najmanjeg prema najvećem!
 
-Putanja korak-po-korak:
-  1. Ide skroz ulijevo na dno:                 --> [4]
-  2. Vraća se gore na roditelja:               --> [7]
-  3. Spušta se desno, pa na njegovo dno:       --> [12]
-  4. Ide na desno dijete od 12:                --> [15]
-  5. Lijeva strana gotova, ide na glavni Root: --> [18]
-  6. Prelazi desno i traži dno skroz lijevo:   --> [22]
-  7. Vraća se gore na roditelja tog dijela:    --> [25]
-  8. Ide desno, pa provjerava dno:             --> [31]
-  9. Završava na zadnjem desnom čvoru:         --> [35]
+Putanja korak-po-korak kroz veće stablo:
+  1. Ide skroz ulijevo na dno (nema djece):               --> [4]
+  2. Vraća se gore na roditelja:                           --> [7]
+  3. Ide desno na [12] -> spušta se na [15] -> pravilo 
+     kaže: riješi prvo njegovo lijevo podstablo na dnu:    --> [13]
+  4. Vraća se korak gore na roditelja tog podstabla:       --> [15]
+  5. Prelazi na desno dijete čvora 15:                     --> [16]
+  6. Cijelo lijevo podstablo je riješeno, red je na Root:  --> [18]
+  7. Prelazi na desno podstablo, traži dno skroz lijevo:   --> [22]
+  8. Vraća se gore na roditelja te grane:                  --> [25]
+  9. Ide desno na [31] -> spušta se na [35] -> pravilo
+     kaže: riješi prvo njegovo lijevo podstablo na dnu:    --> [33]
+ 10. Vraća se korak gore na roditelja tog podstabla:       --> [35]
+ 11. Završava na zadnjem desnom čvoru na samom dnu:        --> [38]
 
 Krajnji rezultat (Lista):
-[4, 7, 12, 15, 18, 22, 25, 31, 35]
+[4, 7, 12, 13, 15, 16, 18, 22, 25, 31, 33, 35, 38]
+================================================================================
+
+                      [18]  <-- Glavni Korijen (Root)
+                     /    \
+                    /      \
+                  [7]      [25]
+                 /   \     /   \
+               [4]  [12] [22]  [31]
+                      \          \
+                      [15]       [35]
+                      /  \       /  \
+                    [13] [16]  [33] [38]  <-- DODATNI RED (Najdublje dno)
 
 ================================================================================
 2. PRE-ORDER OBILAZAK
 ================================================================================
 Pravilo: Trenutni čvor (Roditelj) -> Lijevo podstablo -> Desno podstablo
-Karakteristika: Korijen se posjećuje PRVI. Odlično za kopiranje/kloniranje stabla.
+Karakteristika: Roditelj se bilježi ODMAH čim algoritam zakorači na njega, 
+a tek onda se rekurzivno spušta dublje u grane.
 
-Putanja korak-po-korak:
-  1. Počinje odmah na glavnom Rootu:           --> [18]
-  2. Spušta se lijevo i odmah bilježi čvor:    --> [7]
-  3. Ide skroz lijevo na dno:                  --> [4]
-  4. Vraća se na 7, ide desno i bilježi čvor:  --> [12]
-  5. Ide na njegovo desno dijete:              --> [15]
-  6. Prelazi na desnu stranu i bilježi čvor:   --> [25]
-  7. Ide lijevo na dno:                        --> [22]
-  8. Vraća se na 25, ide desno i bilježi čvor: --> [31]
-  9. Ide na zadnje desno dijete:               --> [35]
+Putanja korak-po-korak kroz veće stablo:
+  1. Počinje odmah na glavnom Rootu i bilježi ga:          --> [18]
+  2. Spušta se lijevo na roditelja i odmah ga bilježi:     --> [7]
+  3. Ide skroz lijevo na dno:                              --> [4]
+  4. Vraća se na 7, ide desno na [12] i bilježi ga:        --> [12]
+  5. Spušta se na [15] i odmah ga bilježi:                 --> [15]
+  6. Ide na njegovo lijevo dijete na dnu:                  --> [13]
+  7. Ide na njegovo desno dijete na dnu:                   --> [16]
+  8. Lijeva polovica stabla gotova, skače na desnu granu:  --> [25]
+  9. Ide lijevo na dno:                                    --> [22]
+ 10. Vraća se na 25, ide desno na [31] i bilježi ga:        --> [31]
+ 11. Spušta se na [35] i odmah ga bilježi:                 --> [35]
+ 12. Ide na njegovo lijevo dijete na dnu:                  --> [33]
+ 13. Završava na zadnjem desnom djetetu na dnu:            --> [38]
 
 Krajnji rezultat (Lista):
-[18, 7, 4, 12, 15, 25, 22, 31, 35]
+[18, 7, 4, 12, 15, 13, 16, 25, 22, 31, 35, 33, 38]
+================================================================================
+
+                      [18]  <-- Glavni Korijen (Root)
+                     /    \
+                    /      \
+                  [7]      [25]
+                 /   \     /   \
+               [4]  [12] [22]  [31]
+                      \          \
+                      [15]       [35]
+                      /  \       /  \
+                    [13] [16]  [33] [38]  <-- DODATNI RED (Najdublje dno)
 
 ================================================================================
 3. POST-ORDER OBILAZAK
 ================================================================================
 Pravilo: Lijevo podstablo -> Desno podstablo -> Trenutni čvor (Roditelj)
-Karakteristika: Korijen se posjećuje ZADNJI. Koristi se za brisanje stabla iz memorije.
+Karakteristika: Roditelj se posjećuje tek na samom KRAJU, odnosno tek kada 
+algoritam u potpunosti očisti i lijevu i desnu granu ispod njega.
 
-Putanja korak-po-korak:
-  1. Ide skroz na dno lijevo (nema djece):     --> [4]
-  2. Prelazi na desnu granu, na dno (dijete):  --> [15]
-  3. Vraća se gore na roditelja te djece:      --> [12]
-  4. Pošto je riješio i 4 i 12, bilježi njih:  --> [7]
-  5. Prelazi desno, ide na dno lijevo:         --> [22]
-  6. Ide na suprotno dno desno:                --> [35]
-  7. Vraća se na roditelja te desne djece:     --> [31]
-  8. Pošto je riješio i 22 i 31, bilježi njih: --> [25]
-  9. Cijelo stablo je obiđeno, bilježi Root:   --> [18]
+Putanja korak-po-korak kroz veće stablo:
+  1. Ide skroz na dno lijevo (nema djece):                 --> [4]
+  2. Prelazi na desnu granu čvora 7, spušta se skroz do 
+     dna lijeve strane tog podstabla:                      --> [13]
+  3. Prelazi na suprotno dno desne strane tog podstabla:   --> [16]
+  4. Pošto su riješeni i 13 i 16, bilježi njihova roditelja:--> [15]
+  5. Bilježi roditelja [12] (jer je njegovo desno podstablo završeno) -> [12]
+  6. Pošto su riješeni i 4 i 12, bilježi njihova roditelja:--> [7]
+  7. Prelazi na desnu stranu stabla, na dno skroz lijevo:  --> [22]
+  8. Ide na desnu stranu, preskače 31 i 35, traži dno lijevo:--> [33]
+  9. Ide na suprotno dno desno:                            --> [38]
+ 10. Pošto su riješeni i 33 i 38, bilježi njihova roditelja:--> [35]
+ 11. Bilježi roditelja [31] (jer je njegovo desno podstablo završeno) -> [31]
+ 12. Pošto su riješeni i 22 i 31, bilježi njihova roditelja:--> [25]
+ 13. Cijelo stablo (i lijevo i desno) je očišćeno, piše se Root: -> [18]
 
 Krajnji rezultat (Lista):
-[4, 15, 12, 7, 22, 35, 31, 25, 18]
+[4, 13, 16, 15, 12, 7, 22, 33, 38, 35, 31, 25, 18]
 
 ================================================================================
-(Gdje se nalazi glavni korijen 18?)
+(Gdje se nalazi glavni korijen 18 u dugom stablu?)
 ================================================================================
-  * PRE-order:  Korijen je PRVI      -> [ 18,  ...,  ... ]
-  * IN-order:   Korijen je u SREDINI -> [ ...,  18,  ... ]
-  * POST-order: Korijen je ZADNJI    -> [ ...,  ...,  18 ]
+  * PRE-order:  Korijen je na PRVOM mjestu   --> [ 18,  ...,  ... ]
+  * IN-order:   Korijen je točno u SREDINI   --> [ ...,  18,  ... ]
+  * POST-order: Korijen je na ZADNJEM mjestu  --> [ ...,  ...,  18 ]
 ================================================================================
