@@ -1,0 +1,70 @@
+======================================================================
+SELECTION SORT (SORTIRANJE ODABIROM)
+======================================================================
+
+Selection Sort je jednostavan, intuitivan algoritam za sortiranje. 
+Radi tako da kroz niz neprestano traži NAJMANJI element (ako sortiramo 
+uzlazno) i prebacuje ga na početak niza (odnosno na prvo slobodno mjesto).
+
+Niz je vizualno podijeljen na dva dijela: sortirani dio (na početku) 
+i nesortirani dio (ostatak niza).
+
+KAKO ALGORITAM RADI?
+--------------------
+1. Kreni od prvog elementa niza (to je trenutno minimalna vrijednost).
+2. Prođi kroz cijeli ostatak niza i pronađi stvarno najmanji broj.
+3. Zamijeni mjesta (swap) tom stvarno najmanjem broju i broju s početka.
+4. Pomakni se na iduće mjesto u nizu i ponovi postupak za ostatak niza.
+
+
+VIZUALNI PRIKAZ: Prolazak kroz niz [5, 1, 4, 2]
+--------------------------------------------------
+
+Početni niz: [ 5, 1, 4, 2 ]
+
+PROLAZ 1: Tražimo najmanji element u cijelom nizu
+          - Pretpostavka: minimum je 5
+          - Provjera: 1 je manji od 5 (novi min = 1)
+          - Provjera: 4 nije manji od 1
+          - Provjera: 2 nije manji od 1
+          - Stvarni minimum je 1! Mijenjamo mjesta za 5 i 1.
+         
+          [ 5, 1, 4, 2 ]
+            ^--^
+          [ 1, 5, 4, 2 ]   <-- 1 je sada na svom trajnom mjestu!
+            *
+
+PROLAZ 2: Tražimo najmanji element u ostatku niza [5, 4, 2]
+          - Pretpostavka: minimum je 5
+          - Provjera: 4 je manji od 5 (novi min = 4)
+          - Provjera: 2 je manji od 4 (novi min = 2)
+          - Stvarni minimum je 2! Mijenjamo mjesta za 5 i 2.
+         
+          [ 1, 5, 4, 2 ]
+               ^------^
+          [ 1, 2, 4, 5 ]   <-- 2 je sjeo na svoje trajno mjesto!
+            * *
+
+PROLAZ 3: Tražimo najmanji element u ostatku niza [4, 5]
+          - Pretpostavka: minimum je 4
+          - Provjera: 5 nije manji od 4
+          - Stvarni minimum je već na svom mjestu (4). Nema zamjene.
+         
+          [ 1, 2, 4, 5 ]   <-- 4 i 5 su automatski na mjestu
+            * * * *
+
+Konačni sortirani niz: [1, 2, 4, 5]
+
+
+VREMENSKA I PROSTORNA SLOŽENOST
+-------------------------------
+* Najgori slučaj:    O(n^2) - algoritam uvijek mora proći sve provjere
+* Prosječan slučaj:  O(n^2) - isti broj usporedbi bez obzira na razbacanost
+* Najbolji slučaj:   O(n^2) - čak i ako je niz potpuno sortiran, on to ne 
+                              zna dok ne provjeri sve elemente do kraja
+* Prostor:           O(1)   - in-place algoritam, ne troši dodatnu memoriju
+
+ZANIMLJIVOST:
+Za razliku od Bubble Sorta koji stalno radi zamjene (swap), Selection Sort
+radi najviše JEDNU zamjenu po prolazu, što ga čini učinkovitijim ako je 
+operacija pisanja u memoriju vrlo skupa.
