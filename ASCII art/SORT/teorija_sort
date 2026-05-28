@@ -1,0 +1,10 @@
++-------------------+-----------------+-------------------+-----------------+-----------+-------------------------------------------------------------+
+| Algoritam         | Najbolji slučaj | Prosječan slučaj  | Najgori slučaj  | Stabilan? | Napomena                                                    |
++-------------------+-----------------+-------------------+-----------------+-----------+-------------------------------------------------------------+
+| Bubble Sort       | O(n)            | O(n^2)            | O(n^2)          | Da        | Odličan za već sortirane nizove ako imaš zastavicu (flag).  |
+| Selection Sort    | O(n^2)          | O(n^2)            | O(n^2)          | Ne        | Uvijek radi isti broj usporedbi, bez obzira na stanje niza. |
+| Insertion Sort    | O(n)            | O(n^2)            | O(n^2)          | Da        | Super učinkovit za jako male nizove ili gotovo sortirane.   |
+| Merge Sort        | O(n log n)      | O(n log n)        | O(n log n)      | Da        | Stabilan, ali troši dodatnu memoriju O(n) za spajanje.      |
+| Quick Sort        | O(n log n)      | O(n log n)        | O(n^2)          | Ne        | Najbrži u praksi (in-place), osim ako loše odabereš pivot.  |
+| Bucket Sort       | O(n + k)        | O(n + k)          | O(n^2)          | Da        | Odličan za ravnomjerno raspoređene brojeve (npr. decimale).|
++-------------------+-----------------+-------------------+-----------------+-----------+-------------------------------------------------------------+
