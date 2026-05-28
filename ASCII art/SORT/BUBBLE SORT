@@ -1,0 +1,82 @@
+======================================================================
+BUBBLE SORT (ALGORITAM MJEHURIĆA)
+======================================================================
+
+Bubble Sort je jedan od najjednostavnijih algoritama za sortiranje. 
+Naziv dolazi od načina na koji elementi "putuju" kroz niz: veći 
+elementi se postupno pomiču prema kraju niza, baš kao što mjehurići 
+zraka u vodi isplivaju na površinu.
+
+KAKO ALGORITAM RADI?
+--------------------
+1. Algoritam kreće od početka niza i uspoređuje dva susjedna elementa.
+2. Ako je lijevi element veći od desnog, oni mijenjaju mjesta (swap).
+3. Postupak se ponavlja za svaki idući par do kraja niza.
+4. Kada algoritam dođe do kraja, najveći element je na svom mjestu.
+5. Cijeli proces se ponavlja za preostale elemente dok se sve ne sortira.
+
+
+VIZUALNI PRIKAZ: Prvi prolaz kroz niz [5, 1, 4, 2]
+--------------------------------------------------
+
+Početni niz: [ 5, 1, 4, 2 ]
+
+KORAK 1: Uspoređujemo prva dva elementa (5 i 1)
+         5 > 1? Da! -> Mijenjaju mjesta.
+         
+         [ 5, 1, 4, 2 ]
+           ^--^
+         [ 1, 5, 4, 2 ]   <-- 5 se pomaknuo udesno
+
+
+KORAK 2: Uspoređujemo idući par (5 i 4)
+         5 > 4? Da! -> Mijenjaju mjesta.
+         
+         [ 1, 5, 4, 2 ]
+              ^--^
+         [ 1, 4, 5, 2 ]   <-- 5 ide dalje desno
+
+
+KORAK 3: Uspoređujemo zadnji par u ovom krugu (5 i 2)
+         5 > 2? Da! -> Mijenjaju mjesta.
+         
+         [ 1, 4, 5, 2 ]
+                 ^--^
+         [ 1, 4, 2, 5 ]   <-- 5 je stigao na svoju konačnu poziciju!
+                    *
+
+Napomena: Nakon ovog prvog prolaza, broj 5 je osiguran na zadnjem mjestu 
+(označeno sa *). U idućem krugu algoritam ga više ne mora provjeravati.
+
+
+DRUGI PROLAZ KROZ NIZ [1, 4, 2, 5]
+----------------------------------
+Sada sortiramo preostali dio niza [1, 4, 2]:
+
+KORAK 1: Uspoređujemo 1 i 4
+         1 > 4? Ne. -> Ostaju na istom mjestu.
+         
+         [ 1, 4, 2, 5 ]
+           ^--^
+         [ 1, 4, 2, 5 ]
+
+
+KORAK 2: Uspoređujemo 4 i 2
+         4 > 2? Da! -> Mijenjaju mjesta.
+         
+         [ 1, 4, 2, 5 ]
+              ^--^
+         [ 1, 2, 4, 5 ]   <-- 4 je stigao na svoje mjesto!
+                 * *
+
+U idućem prolazu provjerava se još samo par [1, 2]. Kako su oni već u 
+ispravnom redoslijedu, algoritam završava rad. 
+Konačni sortirani niz je: [1, 2, 4, 5].
+
+
+VREMENSKA I PROSTORNA SLOŽENOST
+-------------------------------
+* Najgori slučaj:    O(n^2) - kada je niz potpuno obrnut (npr. 5, 4, 3...)
+* Prosječan slučaj:  O(n^2) - kada su elementi nasumično razbacani
+* Najbolji slučaj:   O(n)   - ako je niz već sortiran (uz koristan flag)
+* Prostor:           O(1)   - stabilan in-place algoritam (ne troši dodatnu memoriju)
