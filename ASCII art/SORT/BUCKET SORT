@@ -1,0 +1,75 @@
+======================================================================
+BUCKET SORT (SORTIRANJE KANTAMA / KOŠARAMA)
+======================================================================
+
+Bucket Sort je specifičan algoritam koji ne koristi klasično međusobno 
+uspoređivanje svih elemenata. Umjesto toga, on koristi pristup 
+"raspodijeli pa sastavi" (Scatter-Gather). 
+
+Ideja je da se elementi niza rasporede u nekoliko manjih "kanti" 
+(buckets), zatim se svaka kanta zasebno sortira (obično nekim drugim 
+brzim algoritmom poput Insertion Sorta), i na kraju se elementi iz 
+svih kanti samo prepišu natrag u jedan veliki niz.
+
+Preduvjet za vrhunsku brzinu ovog algoritma je da su podaci prilično 
+ravnomjerno raspoređeni u nekom poznatom rasponu (npr. sve decimale 
+između 0.0 i 1.0).
+
+KAKO ALGORITAM RADI?
+--------------------
+1. STVORI KANTE: Napravi prazan niz kanti (broj kanti obično ovisi o 
+   broju elemenata ili rasponu podataka).
+2. RASPODIJELI (Scatter): Prođi kroz početni niz i ubaci svaki element 
+   u njegovu odgovarajuću kantu na temelju formule / vrijednosti.
+3. SORTIRAJ KANTE: Pojedinačno sortiraj elemente unutar svake kante.
+4. SPOJI (Gather): Prođi redom kroz sve kante i spoji njihove elemente 
+   natrag u početni niz.
+
+
+VIZUALNI PRIKAZ: Sortiranje niza decimalnih brojeva
+--------------------------------------------------
+
+Početni niz: [ 0.42, 0.17, 0.47, 0.11, 0.25, 0.89 ]
+
+Kreiramo 5 praznih kanti (indeksi od 0 do 4).
+Formulom (broj * 5) određujemo u koju kantu ide koji broj:
+
+
+1. FAZA: RASPODJELA U KANTE (Scatter)
+
+   Kanta 0 (raspon 0.0 - 0.2): [ 0.17, 0.11 ]
+   Kanta 1 (raspon 0.2 - 0.4): [ 0.25 ]
+   Kanta 2 (raspon 0.4 - 0.6): [ 0.42, 0.47 ]
+   Kanta 3 (raspon 0.6 - 0.8): [ ]
+   Kanta 4 (raspon 0.8 - 1.0): [ 0.89 ]
+
+
+2. FAZA: SORTIRANJE SVAKE KANTE POSEBNO
+
+   Kanta 0 (sortirano):        [ 0.11, 0.17 ]   <-- 11 i 17 su zamijenili mjesta
+   Kanta 1 (sortirano):        [ 0.25 ]
+   Kanta 2 (sortirano):        [ 0.42, 0.47 ]
+   Kanta 3 (sortirano):        [ ]
+   Kanta 4 (sortirano):        [ 0.89 ]
+
+
+3. FAZA: SPAJANJE NATRAG U NIZ (Gather)
+
+   Samo prepisujemo brojeve iz kante 0, pa kante 1, pa kante 2...
+
+   Konačni niz: [ 0.11, 0.17, 0.25, 0.42, 0.47, 0.89 ] <-- Potpuno sortirano!
+
+
+VREMENSKA I PROSTORNA SLOŽENOST
+-------------------------------
+* Najbolji slučaj:   O(n + k) - gdje je "n" broj elemenata, a "k" broj kanti.
+                                Ako su podaci savršeno ravnomjerno raspoređeni,
+                                algoritam radi u LINEARNOM vremenu (brže od
+                                Quick i Merge Sorta!).
+* Prosječan slučaj:  O(n + k) - i dalje izuzetno brz pod uvjetom da kante 
+                                nisu pretrpane.
+* Najgori slučaj:    O(n^2)   - ako svi elementi završe u ISTOJ kanti. Tada
+                                učinkovitost ovisi o algoritmu koji sortira 
+                                tu kantu (ako je to Insertion Sort, dobivamo n^2).
+* Prostor:           O(n + k) - troši dodatnu memoriju jer mora stvoriti sve te
+                                kante i u njih privremeno spremiti elemente.
