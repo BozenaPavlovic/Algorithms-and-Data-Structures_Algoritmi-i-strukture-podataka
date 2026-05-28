@@ -1,0 +1,78 @@
+======================================================================
+INSERTION SORT (SORTIRANJE UMETANJEM)
+======================================================================
+
+Insertion Sort radi na vrlo sličan način na koji većina ljudi slaže 
+karte u ruci dok igraju belu ili briškulu. 
+
+Krenemo od druge karte, izvučemo je, usporedimo je s onima s lijeve 
+strane i "umetnemo" (uguramo) je na njezino točno mjesto. Sve karte 
+koje su veće od nje pomaknemo za jedno mjesto udesno kako bismo 
+napravili prostor.
+
+Niz je vizualno podijeljen na:
+- Sortirani dio (na samom početku, u startu ima samo 1 element)
+- Nesortirani dio (ostatak niza iz kojeg uzimamo elemente)
+
+KAKO ALGORITAM RADI?
+--------------------
+1. Uzmi prvi element iz nesortiranog dijela niza (trenutni element).
+2. Uspoređuj ga s elementima s lijeve strane (koji su već sortirani).
+3. Sve elemente koji su veći od trenutnog pomakni za jedno mjesto udesno.
+4. Na upražnjeno mjesto umetni trenutni element.
+5. Ponovi postupak za sve preostale elemente u nizu.
+
+
+VIZUALNI PRIKAZ: Prolazak kroz niz [5, 1, 4, 2]
+--------------------------------------------------
+
+Početni niz: [ 5 | 1, 4, 2 ]  (Broj 5 je naša početna sortirana "ruka")
+
+PROLAZ 1: Uzimamo broj 1 i ubacujemo ga u sortirani dio
+          - Trenutni element = 1
+          - Gledamo lijevo: 5 je veći od 1 -> pomičemo 5 udesno
+          - Ispred nema ničega, umetni 1 na početak.
+         
+          [ 5 | 1, 4, 2 ]  --> 1 ide van, 5 se širi desno: [ _, 5, 4, 2 ]
+          [ 1, 5 | 4, 2 ]  --> 1 je umetnut na slobodno mjesto.
+            * *
+
+PROLAZ 2: Uzimamo broj 4 i ubacujemo ga u sortirani dio [1, 5]
+          - Trenutni element = 4
+          - Gledamo lijevo: 5 je veći od 4 -> pomičemo 5 udesno
+          - Gledamo dalje lijevo: 1 NIJE veći od 4 -> stani.
+          - Umetni 4 na prazno mjesto (između 1 i 5).
+         
+          [ 1, 5 | 4, 2 ]  --> 4 ide van, 5 se širi desno: [ 1, _, 5, 2 ]
+          [ 1, 4, 5 | 2 ]  --> 4 je umetnut.
+            * * *
+
+PROLAZ 3: Uzimamo broj 2 i ubacujemo ga u sortirani dio [1, 4, 5]
+          - Trenutni element = 2
+          - Gledamo lijevo: 5 je veći od 2 -> pomakni 5 desno
+          - Gledamo lijevo: 4 je veći od 2 -> pomakni 4 desno
+          - Gledamo lijevo: 1 NIJE veći od 2 -> stani.
+          - Umetni 2 na prazno mjesto (između 1 i 4).
+         
+          [ 1, 4, 5 | 2 ]  --> 2 ide van, 5 i 4 se šire desno: [ 1, _, 4, 5 ]
+          [ 1, 2, 4, 5 ]   --> 2 je umetnut. Cijeli niz je sortiran!
+            * * * *
+
+Konačni sortirani niz: [1, 2, 4, 5]
+
+
+VREMENSKA I PROSTORNA SLOŽENOST
+-------------------------------
+* Najgori slučaj:    O(n^2) - kada je niz potpuno obrnut (npr. 5, 4, 3...)
+                              jer svaki element moramo vući skroz na početak.
+* Prosječan slučaj:  O(n^2) - kada su elementi izmiješani.
+* Najbolji slučaj:   O(n)   - ako je niz VEĆ SORTIRAN! Algoritam samo prođe
+                              kroz niz i zaključi da nitko s lijeve strane 
+                              nije veći, pa nema nikakvog pomicanja.
+* Prostor:           O(1)   - in-place algoritam (sve radi unutar istog niza).
+
+ZAŠTO JE KORISTAN?
+U praksi je nevjerojatno brz za male nizove (npr. manje od 10-20 elemenata) 
+i za nizove koji su već "gotovo sortirani" (npr. ako samo dodaš par novih 
+brojeva na kraj već sortiranog niza). Zato ga napredni algoritmi poput 
+Timsort-a (koji Python koristi u pozadini) koriste kao pomoćni korak!
