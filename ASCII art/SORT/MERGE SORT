@@ -1,0 +1,67 @@
+======================================================================
+MERGE SORT (SORTIRANJE SPAJANJEM)
+======================================================================
+
+Merge Sort je napredni algoritam za sortiranje koji se temelji na 
+princip "podijeli pa vladaj" (Divide and Conquer). Radi tako da niz 
+neprestano dijeli na pola sve dok ne dođe do pojedinačnih elemenata, 
+a zatim ih spaja u ispravnom redoslijedu.
+
+KAKO ALGORITAM RADI?
+--------------------
+1. DIJELI: Ako niz ima više od jednog elementa, podijeli ga na dvije polovice.
+2. REKURZIVNO SORTIRAJ: Nastavi dijeliti te polovice dok ne dobiješ nizove 
+   od samo jednog elementa (niz s jednim elementom je uvijek sortiran).
+3. SPOJI (MERGE): Spajaj manje sortirane nizove u veće sortirane nizove 
+   sve dok ponovno ne dobiješ jedan cijeli, sortirani niz.
+
+
+VIZUALNI PRIKAZ: Rastavljanje i spajanje niza [5, 1, 4, 2]
+----------------------------------------------------------
+
+1. FAZA: DIJELJENJE (Rastavljanje do pojedinačnih elemenata)
+
+          [ 5, 1, 4, 2 ]         <-- Početni nesortirani niz
+             /        \
+       [ 5, 1 ]      [ 4, 2 ]    <-- Dijeljenje na pola
+       /      \      /      \
+     [5]      [1]  [4]      [2]  <-- Elementi su potpuno rastavljeni
+
+
+2. FAZA: SPAJANJE (Uspoređivanje i slaganje u redoslijed)
+
+     [5]      [1]  [4]      [2]  
+       \      /      \      /
+       [ 1, 5 ]      [ 2, 4 ]    <-- Spajanje parova u sortirane podnizove
+             \        /
+          [ 1, 2, 4, 5 ]         <-- Konačno spajanje u jedan sortirani niz
+
+
+DETALJAN PRIKAZ ZADNJEG KORAKA SPAJANJA
+---------------------------------------
+Kako algoritam spaja dva sortirana niza [1, 5] i [2, 4]:
+
+Lijevi niz: [ 1, 5 ] (Pokazivač gleda 1)
+Desni niz:  [ 2, 4 ] (Pokazivač gleda 2)
+Novi niz:   [ ]
+
+Korak 1: Usporedi 1 i 2. Manji je 1. Uzmi 1.
+         Novi niz: [ 1 ]
+
+Korak 2: Usporedi preostali 5 i 2. Manji je 2. Uzmi 2.
+         Novi niz: [ 1, 2 ]
+
+Korak 3: Usporedi preostali 5 i 4. Manji je 4. Uzmi 4.
+         Novi niz: [ 1, 2, 4 ]
+
+Korak 4: Preostao je samo broj 5 u lijevom nizu. Samo ga prepiši.
+         Novi niz: [ 1, 2, 4, 5 ] <-- Gotovo!
+
+
+VREMENSKA I PROSTORNA SLOŽENOST
+-------------------------------
+* Najgori slučaj:    O(n log n) - izuzetno brz čak i za goleme podatke
+* Prosječan slučaj:  O(n log n) - uvijek radi stabilno i predvidljivo
+* Najbolji slučaj:   O(n log n) - jednako dugo traje čak i ako je već sortiran
+* Prostor:           O(n)       - NIJE "in-place", troši dodatnu memoriju 
+                                  jer mora raditi pomoćne nizove za spajanje
