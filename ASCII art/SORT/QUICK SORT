@@ -1,0 +1,111 @@
+======================================================================
+QUICK SORT (BRZO SORTIRANJE) - 2 VERZIJE
+======================================================================
+
+Quick Sort je jedan od najbržih i najpopularnijih algoritama u praksi. 
+Radi na principu "podijeli pa vladaj" (Divide and Conquer). 
+
+Ključna ideja je odabir jednog elementa koji se zove PIVOT. Algoritam 
+zatim preraspoređuje niz tako da svi elementi MANJI od pivota idu 
+LIJEVO, a svi VEĆI idu DESNO. Nakon toga se isti postupak rekurzivno 
+ponavlja za lijevu i desnu stranu.
+
+Tvoj profesor vam je dao dvije verzije jer svaka ima drugačiji pristup 
+memoriji i načinu implementacije:
+
+1. VERZIJA (In-place): Radi direktno u postojećem nizu (štedi memoriju).
+2. VERZIJA (List Comprehension): Radi s novim listama (jednostavnija za razumjeti).
+
+----------------------------------------------------------------------
+VERZIJA 1: IN-PLACE S POKAZIVAČIMA (Lomuto particija)
+----------------------------------------------------------------------
+Ova verzija je memorijski optimalna jer NE stvara nove nizove. Ona 
+koristi indeks "i" kako bi razgraničila elemente koji su manji od pivota 
+i index "j" koji skenira niz.
+
+VIZUALNI PRIKAZ PARTICIJE: niz [5, 1, 4, 2]
+U ovom kodu pivot je uvijek zadnji element: pivot = arr[high] (broj 2).
+
+Početno stanje:
+low = 0, high = 3, pivot = 2, i = 0
+
+KORAK 1: j = 0 -> arr[0] je 5
+         5 <= 2? Ne.
+         (i ostaje na 0, j se pomiče na 1)
+         [ 5, 1, 4, 2 ]
+           i
+           j
+
+KORAK 2: j = 1 -> arr[1] je 1
+         1 <= 2? Da! -> Zamijeni arr[i] i arr[j] (mijenjaju se 5 i 1), i se povećava.
+         [ 1, 5, 4, 2 ]
+              i
+              j
+
+KORAK 3: j = 2 -> arr[2] je 4
+         4 <= 2? Ne.
+         (i ostaje na 1, j završava petlju)
+         [ 1, 5, 4, 2 ]
+              i
+                 j
+
+KORAK NA KRAJU: Zamjena pivota (arr[high]) s arr[i] kako bi pivot došao na sredinu.
+               Mijenjaju se 5 i 2.
+         [ 1, 2, 4, 5 ]
+              *
+Funkcija vraća indeks i (to je indeks 1, gdje se sada nalazi pivot broj 2).
+Sve lijevo od indeksa 1 je manje od 2, sve desno je veće!
+
+----------------------------------------------------------------------
+VERZIJA 2: PYTHONIC VERZIJA (S List Comprehension)
+----------------------------------------------------------------------
+Ova verzija je izuzetno čitljiva jer doslovno prati logiku definicije.
+Pivot je zadnji element: arr[-1]. 
+Zatim se kroz "list comprehension" kreiraju potpuno nove liste:
+- left: svi elementi koji su manji ili jednaki pivotu
+- right: svi elementi koji su veći od pivota
+
+VIZUALNI PRIKAZ DIJELJENJA: niz [5, 1, 4, 2]
+
+1. KORAK: pivot = 2
+          arr[:-1] (ostatak niza bez pivota) je [5, 1, 4]
+
+          Izvlačenje u nove liste:
+          left  = [x for x in [5, 1, 4] if x <= 2] -> [1]
+          right = [x for x in [5, 1, 4] if x > 2]  -> [5, 4]
+
+2. KORAK: Rekurzivno pozivanje za left i right te spajanje:
+          quick_sort_2([1]) + [2] + quick_sort_2([5, 4])
+
+          - quick_sort_2([1]) odmah vraća [1] (jer je duljina <= 1)
+          - quick_sort_2([5, 4]) uzima 4 kao pivot, left je [], right je [5]
+            pa to postane [] + [4] + [5] -> [4, 5]
+
+3. KORAK: Spajanje svega zajedno:
+          [1] + [2] + [4, 5] = [1, 2, 4, 5]
+
+----------------------------------------------------------------------
+USPOREDBA OVIH VERZIJA (Za usmeni ispit!)
+----------------------------------------------------------------------
+
++------------------------+---------------------------+---------------------------+
+| Značajka               | VERZIJA 1 (In-place)      | VERZIJA 2 (Nove liste)    |
++------------------------+---------------------------+---------------------------+
+| Prostorna složenost    | O(log n) - Odlična        | O(n) - Troši puno više     |
+|                        | (troši memoriju samo za   | memorije jer stalno radi  |
+|                        | rekurzivne pozive).       | nove liste u svakom koraku|
++------------------------+---------------------------+---------------------------+
+| Čitljivost koda        | Teža za pratiti zbog      | Izuzetno lagana i jasna,  |
+|                        | indeksa i zamjena mjesta. | pravi "školski" primjer.  |
++------------------------+---------------------------+---------------------------+
+| Brzina u praksi        | Puno brža jer ne gubi     | Sporija zbog stalnog      |
+|                        | vrijeme na alokaciju nove | kreiranja i kopiranja     |
+|                        | memorije za liste.        | elemenata u nove liste.   |
++------------------------+---------------------------+---------------------------+
+
+VREMENSKA SLOŽENOST (Vrijedi za obje verzije):
+* Najbolji slučaj:   O(n log n) - kada pivot svaki put podijeli niz točno na pola.
+* Prosječan slučaj:  O(n log n) - u praksi najčešći slučaj, iznimno brz algoritam.
+* Najgori slučaj:    O(n^2)     - kada je niz već sortiran ili potpuno obrnut, 
+                                  a mi uvijek biramo zadnji element za pivot. 
+                                  Tada se niz dijeli na "0 elemenata" i "n-1 elemenata".
