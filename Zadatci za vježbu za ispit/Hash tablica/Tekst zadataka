@@ -1,0 +1,37 @@
+1. Postotak praznih mjesta nakon umetanja
+Napišite funkciju empty_percentage(word_list, hash_fn, table_size) koja vraća postotak praznih mjesta u hash tablici nakon što ste umetnuli sve riječi iz liste.
+
+2. Prosječna duljina lanca kolizija
+Implementirajte avg_collision_chain(word_list, hash_fn, table_size) koja vraća prosječnu duljinu lanca za sva popunjena mjesta u tablici (ako koristite lančano rješavanje kolizija).
+Za linearno istraživanje, neka bude prosječan broj pokušaja po umetanju.
+
+3. Maksimalni broj kolizija na jednom mjestu
+Napišite max_collisions(word_list, hash_fn, table_size) koja vraća najveći broj ključeva koji su se preslikali na isti indeks (prije rješavanja kolizija).
+
+4. Varijanca popunjenosti mjesta
+Implementirajte load_variance(word_list, hash_fn, table_size) koja izračunava varijancu broja ključeva po svakom mogućem indeksu (prije rješavanja kolizija). To pokazuje koliko je raspodjela neravnomjerna.
+
+5. Usporedba stvarnih i očekivanih kolizija
+Napišite expected_vs_actual_collisions(word_list, table_size) koja vraća razliku (u postotcima) između stvarnog broja kolizija i očekivanog broja kolizija po principu rođendanskog paradoksa.
+Očekivani broj kolizija za n ključeva i m mjesta: n - m * (1 - ((m-1)/m)^n)
+
+6. Hash funkcija s promjenjivom veličinom tablice
+Napišite optimal_table_size(word_list, hash_fn, max_collision_percent) koja vraća najmanju veličinu tablice table_size takvu da postotak kolizija ne prelazi max_collision_percent.
+
+7. Usporedba dvije hash funkcije
+Implementirajte better_hash(word_list, hash_fn1, hash_fn2, table_size) koja vraća string "first", "second" ili "equal" ovisno koja hash funkcija daje manji postotak kolizija za danu listu riječi.
+
+8. Kolizije samo za riječi određene duljine
+Napišite collisions_by_length(word_list, hash_fn, table_size, length) koja vraća postotak kolizija samo među riječima iz liste koje imaju točno length znakova.
+
+9. Kolizije pri postupnom povećanju tablice
+Implementirajte collisions_growth(word_list, hash_fn, start_size, step, steps) koja vraća listu postotaka kolizija za veličine tablice:
+start_size, start_size+step, start_size+2*step, ... (ukupno steps veličina).
+
+10. Simulacija s dva različita rješavanja kolizija
+Napišite compare_collision_resolution(word_list, hash_fn, table_size) koja vraća tuple (linear_percent, chaining_percent) gdje je:
+
+linear_percent postotak ključeva koji su izazvali koliziju pri linearnom istraživanju (svaki pomak je kolizija)
+
+chaining_percent postotak ključeva koji su smješteni u već postojeći lanac (dakle, svi osim prvog u svakom lancu)
+
