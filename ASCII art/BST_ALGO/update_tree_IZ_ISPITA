@@ -1,0 +1,134 @@
+================================================================================
+                    update_tree FUNKCIJA - SAMO ZA TreeNode
+================================================================================
+
+STABLO PRIJE:
+
+            [2]
+           /   \
+         [1]   [3]
+
+
+================================================================================
+KORAK PO KORAK IZVRŠAVANJE
+================================================================================
+
+KORAK 1: POZIV update_tree([2])
+
+           [2]
+          /   \
+        [1]   [3]
+         |
+         V
+    original_key = 2
+
+
+================================================================================
+KORAK 2: REKURZIJA LIJEVO - update_tree([1])
+
+           [1]
+          /   \
+        None  None
+    
+    original_key = 1
+    sum_left = update_tree(None) = 0
+    sum_right = update_tree(None) = 0
+    total_sum = 0 + 0 = 0 (paran)
+    
+    [1] -> key postaje 0
+    
+    return 0 + 1 = 1
+
+
+================================================================================
+KORAK 3: REKURZIJA DESNO - update_tree([3])
+
+           [3]
+          /   \
+        None  None
+    
+    original_key = 3
+    sum_left = update_tree(None) = 0
+    sum_right = update_tree(None) = 0
+    total_sum = 0 + 0 = 0 (paran)
+    
+    [3] -> key postaje 0
+    
+    return 0 + 3 = 3
+
+
+================================================================================
+KORAK 4: POVRATAK U KORIJEN [2]
+
+    sum_left = 1 (iz lijevog podstabla)
+    sum_right = 3 (iz desnog podstabla)
+    total_sum = 1 + 3 = 4 (paran)
+    
+    [2] -> key postaje 0
+    
+    return 4 + 2 = 6
+
+
+================================================================================
+STABLO NAKON:
+
+            [0]
+           /   \
+         [0]   [0]
+
+
+================================================================================
+ŠTO FUNKCIJA VRAĆA?
+================================================================================
+
+    return 6   (ukupna suma originalnih keyeva: 1 + 2 + 3 = 6)
+
+
+================================================================================
+PRAVILO PROMJENE key-a:
+================================================================================
+
+    Ako je zbroj potomaka PARAN    -> novi key = 0
+    Ako je zbroj potomaka NEPARAN  -> novi key = 1
+
+
+================================================================================
+JOŠ JEDAN PRIMJER - STABLO S 4 ČVORA
+================================================================================
+
+PRIJE:
+
+            [5]
+           /   \
+         [2]   [7]
+         /
+       [1]
+
+IZVRŠAVANJE:
+
+    List [1]: nema djece, suma=0 (paran) -> key=0, return 1
+    Čvor [2]: lijevo=1, desno=0, total=1 (neparan) -> key=1, return 1+2=3
+    List [7]: nema djece, suma=0 (paran) -> key=0, return 7
+    Korijen [5]: lijevo=3, desno=7, total=10 (paran) -> key=0, return 10+5=15
+
+NAKON:
+
+            [0]
+           /   \
+         [1]   [0]
+         /
+       [0]
+
+VRAĆENO: 15 (1+2+5+7=15)
+
+
+================================================================================
+BITNO ZAPAMTITI:
+================================================================================
+
+    1. FUNKCIJA MIJENJA key u 0 ili 1
+    2. ORIGINALNI KEYEVI SE GUBE
+    3. FUNKCIJA VRAĆA SUMU SVIH ORIGINALNIH KEYEVA
+    4. REKURZIVNA JE - IDE OD LISTOVA PREMA KORIJENU
+
+================================================================================
