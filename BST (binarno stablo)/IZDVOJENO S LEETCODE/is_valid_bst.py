@@ -9,25 +9,44 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-class Solution(object):
-    def isValidBST(self, root):
-        
-        # Pomoćna funkcija koja prati trenutni čvor i njegove granice
-        def validate(node, low, high):
-            # 1. Bazni slučaj: Prazno stablo je uvijek validan BST
-            if node is None:
+
+
+
+
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def is_valid(node, minn, maxx):
+            if not node:
                 return True
             
-            # 2. Provjera krši li trenutni čvor granice
-            # Vrijednost mora biti strogo veća od low i strogo manja od high
-            if node.val <= low or node.val >= high:
+            if node.val <= minn or node.val >= maxx:
                 return False
             
-            # 3. Rekurzivni korak za lijevo i desno podstablo
-            # Za lijevo dijete: gornja granica postaje trenutni node.val
-            # Za desno dijete: donja granica postaje trenutni node.val
-            return validate(node.left, low, node.val) and validate(node.right, node.val, high)
+            return is_valid(node.left, minn, node.val) and is_valid(node.right, node.val, maxx)
 
-        # Na samom početku, korijen može imati bilo koju vrijednost
-        # Koristimo float('-inf') i float('inf') za minus i plus beskonačno
-        return validate(root, float('-inf'), float('inf'))
+        return is_valid(root, float("-inf"), float("inf"))
+
+# Time Complexity: O(n)
+# Space Complexity: O(h) { here "h" is height of tree }
+
+
+# Bootcamp solution
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        stk = [(root, float('-inf'), float('inf'))]
+
+        while stk:
+            node, minn, maxx = stk.pop()
+
+            if node.val <= minn or node.val >= maxx:
+                return False
+            else:
+                if node.left:
+                    stk.append((node.left, minn, node.val))
+                
+                if node.right:
+                    stk.append((node.right, node.val, maxx))
+        
+        return True
+# Time Complexity: O(n)
+# Space Complexity: O(h) { here "h" is height of tree }
