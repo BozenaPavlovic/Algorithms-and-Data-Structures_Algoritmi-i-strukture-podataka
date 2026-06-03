@@ -1,19 +1,36 @@
 
 class Solution(object):
     def twoSum(self, nums, target):
-        n = len(nums)
-        podsjetnik = {} # Prazna tablica za pamćenje brojeva i njihovih indeksa
+        # 1. INIT HASH MAP (DICTIONARY)
+        # Kreiramo prazan rječnik koji će služiti kao naša brza tablica.
+        # Format tablice će biti -> { BROJ : INDEKS }
+        seen = {} 
         
-        for i in range(n):
-            trenutni_broj = nums[i]
-            fali_mi = target - trenutni_broj
+        # 2. LOOP THROUGH THE ARRAY
+        # Prolazimo kroz cijeli niz brojeva koristeći njihov indeks (i).
+        # len(nums) nam daje ukupan broj elemenata.
+        for i in range(len(nums)):
             
-            # Umjesto druge for petlje, samo pitamo rječnik:
-            if fali_mi in podsjetnik:
-                return [podsjetnik[fali_mi], i] # Vraćamo indeks nađenog para i trenutni indeks i
+            # Trenutni broj iz niza na kojem stoji petlja
+            current = nums[i]
             
-            # Ako ga nema, zapišemo trenutni broj i njegov indeks u tablicu
-            podsjetnik[trenutni_broj] = i
+            # Izračunavamo "komplement" - broj koji nam očajnički fali 
+            # da bismo s trenutnim brojem dobili traženi target.
+            complement = target - current
+            
+            # 3. CHECK HASH MAP FOR COMPLEMENT
+            # Najvažniji dio algoritma! Pitamo rječnik: "Imamo li već zapisan complement?"
+            # Ova provjera u rječniku traje nevjerojatno kratko: O(1) vremena.
+            if complement in seen:
+                # Ako je unutra, našli smo par! 
+                # Iz rječnika izvlačimo indeks od complementa pomoću seen[complement],
+                # a 'i' je indeks našeg trenutnog broja. Vraćamo ih kao listu.
+                return [seen[complement], i]
+            
+            # 4. UPDATE HASH MAP
+            # Ako complement nije u rječniku, moramo trenutni broj spremiti u tablicu.
+            # Ključ (Key) je sam broj 'current', a vrijednost (Value) je njegov indeks 'i'.
+            seen[current] = i
 
 
 
