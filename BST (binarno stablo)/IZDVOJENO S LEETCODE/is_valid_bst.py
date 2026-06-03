@@ -1,6 +1,7 @@
 # https://leetcode.com/problems/validate-binary-search-tree/description/
 # 98. Validate Binary Search Tree
 
+# https://www.youtube.com/watch?v=nTXuWuqIka4
 
 
 # Definition for a binary tree node.
