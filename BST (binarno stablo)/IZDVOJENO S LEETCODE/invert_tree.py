@@ -1,17 +1,20 @@
 # https://leetcode.com/problems/invert-binary-tree/description/
 # 226. Invert Binary Tree
 
-def invert_tree(self, node=None):
-    if node is None:
-        node = self.root
-    if node is None:
-        return None
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def invertTree(self, root):
+        if root is None:
+            return None
+        root.left, root.right = root.right, root.left
 
-    # Zamijeni lijevo i desno
-    node.left, node.right = node.right, node.left
+        self.invertTree(root.left)
+        self.invertTree(root.right)
 
-    # Rekurzivno invertiraj podstabla
-    self.invert_tree(node.left)
-    self.invert_tree(node.right)
-
-    return node
+        return root
+            
