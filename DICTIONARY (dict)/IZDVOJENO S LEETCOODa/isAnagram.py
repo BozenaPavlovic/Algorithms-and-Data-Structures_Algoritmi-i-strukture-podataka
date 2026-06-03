@@ -1,25 +1,36 @@
-
 class Solution(object):
     def isAnagram(self, s, t):
+        # 1. PROVJERA DULJINE
+        # Ako riječi nemaju isti broj slova, ne mogu biti anagrami. Odmah kraj.
         if len(s) != len(t):
             return False
             
-        counter = {}
+        # 2. INICIJALIZACIJA BROJAČA
+        # 'count_map' će čuvati informaciju: { SLOVO : KOLIKO_PUTA_SE_POJAVLJUJE }
+        count_map = {}
         
-        # Brojimo slova u prvoj riječi
-        for slovo in s:
-            if slovo in counter:
-                counter[slovo] += 1
+        # 3. PUNJENJE RJEČNIKA (Prva riječ 's')
+        for char in s:
+            if char in count_map:
+                # Ako je slovo već u tablici, samo povećaj brojač za 1
+                count_map[char] += 1
             else:
-                counter[slovo] = 1
+                # Ako je slovo novo, postavi brojač na 1
+                count_map[char] = 1
                 
-        # Oduzimamo slova iz druge riječi
-        for slovo in t:
-            # Ako slova uopće nema u prvoj riječi, ili smo ga već potrošili
-            if slovo not in counter or counter[slovo] == 0:
+        # 4. PRAŽNJENJE RJEČNIKA I PROVJERA (Druga riječ 't')
+        for char in t:
+            # KLJUČNA PROVJERA:
+            # Ako slova uopće nema u tablici ILI smo ga već potrošili (brojač je 0)
+            if char not in count_map or count_map[char] == 0:
+                # To znači da 't' ima neko slovo viška ili slovo koje 's' nema
                 return False
-            counter[slovo] -= 1
+                
+            # Ako je slovo tu, smanji mu broj dostupnih kopija za 1
+            count_map[char] -= 1
             
+        # 5. KRAJ
+        # Ako smo prošli cijelu riječ 't' bez greške, znači da su slova identična
         return True
 
 
