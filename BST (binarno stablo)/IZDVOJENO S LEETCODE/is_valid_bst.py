@@ -11,6 +11,24 @@
 #         self.left = left
 #         self.right = right
 
+# The exact same code, but clean for paper:
+class Solution:
+
+    def isValidBST(self, root):
+
+        def valid(node, minn, maxx):
+            if node is None:
+                return True
+
+            if node.val <= minn or node.val >= maxx:
+                return False
+
+            # Go left (update max) and go right (update min)
+            return valid(node.left, minn, node.val) and valid(
+                node.right, node.val, maxx
+            )
+
+        return valid(root, float("-inf"), float("inf"))
 
 
 
