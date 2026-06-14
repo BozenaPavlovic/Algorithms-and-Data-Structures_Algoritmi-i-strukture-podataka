@@ -1,14 +1,13 @@
-def maxSubArray(nums: list[int]) -> int:
-    # Na početku, i trenutni i maksimalni zbroj postavljamo na prvi element
+def maxSubArray(nums):
+    # Inicijaliziramo oba zbroja na prvi element (nikako na 0 zbog negativnih brojeva!)
     current_sum = nums[0]
     max_sum = nums[0]
 
-    # Prolazimo kroz ostatak niza (od indeksa 1 nadalje)
     for i in range(1, len(nums)):
-        # Odlučujemo: isplati li se nastaviti stari podniz ili uzeti samo trenutni broj?
+        # Odluči: nastavljaš li stari podniz ili počinješ novi od nums[i]
         current_sum = max(nums[i], current_sum + nums[i])
 
-        # Ako je trenutni zbroj postao veći od povijesnog maksimuma, ažuriramo max_sum
+        # Ažuriraj povijesni maksimum ako je potrebno
         if current_sum > max_sum:
             max_sum = current_sum
 

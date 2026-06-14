@@ -1,19 +1,14 @@
-def maxProfit(prices: list[int]) -> int:
-    # Ako niz ima manje od 2 elementa, ne možemo kupiti i prodati
+def maxProfit(prices):
     if len(prices) < 2:
         return 0
 
-    # Inicijaliziramo najnižu cijenu na prvi dan, a profit na 0
     min_price = prices[0]
     max_profit = 0
 
-    # Prolazimo kroz cijene počevši od drugog dana
     for price in prices[1:]:
-        # Ako je današnja cijena manja od dosadašnje najniže, to nam je nova točka kupnje
         if price < min_price:
-            min_price = price
-        # Inače, računamo potencijalni profit ako bismo prodali danas
+            min_price = price  # Našli smo novu najnižu točku za kupnju
         elif price - min_price > max_profit:
-            max_profit = price - min_price
+            max_profit = price - min_price  # Našli smo bolji profit
 
     return max_profit
