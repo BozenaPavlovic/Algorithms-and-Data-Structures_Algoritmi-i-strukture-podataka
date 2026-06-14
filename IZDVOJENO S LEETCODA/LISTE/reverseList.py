@@ -37,5 +37,4 @@ def reverseList(head):
 
     # Kada 'curr' postane None (dođemo do kraja), 'prev' stoji na zadnjem čvoru
     # koji je sada postao nova glava (head) okrenute liste.
-    return prev  
-glava okrenute liste
+    return prev
