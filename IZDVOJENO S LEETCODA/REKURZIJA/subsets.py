@@ -1,22 +1,50 @@
+# ==============================================================================
+# ZADATAK: 78. Subsets (Backtracking / Generiranje svih podskupova)
+#
+# TEKST ZADATKA:
+# Zadan je niz jedinstvenih cijelih brojeva 'nums'. Potrebno je vratiti sve 
+# moguće podskupove (tzv. partitivni skup). Rezultat ne smije sadržavati 
+# duplikate podskupova, a redoslijed nije bitan.
+#
+# PRIMJER:
+# Unos: nums = [1, 2, 3]
+# Izlaz: [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]]
+#
+# ZAHTJEV NA ISPITU:
+# Zadatak se rješava izgradnjom stabla odluka (State Space Tree). Za svaki broj 
+# u nizu imamo točno dvije opcije: ili ćemo ga ubaciti u trenutni podskup 
+# ili ćemo ga preskočiti. Vremenska složenost je O(2^n) jer se broj podskupova 
+# dupla sa svakim novim elementom.
+# ==============================================================================
+
 def subsets(nums):
     result = []
 
     def backtrack(index, current_subset):
-        # Bazni slučaj: prošli smo sve elemente, spremi kopiju u rezultat
+        # 1. BAZNI SLUČAJ: Kad indeks dođe do kraja niza (prošli smo sve brojeve)
+        # To znači da smo donijeli odluku za svaki element i podskup je spreman.
         if index == len(nums):
-            result.append(list(current_subset))  # list() radi obaveznu kopiju
+            # KLJUČNO ZA ISPIT: Moramo napraviti plitku kopiju pomoću list()!
+            # Ako bismo samo dodali 'current_subset', u rezultatu bismo dobili
+            # prazne liste jer se originalna lista kroz rekurziju stalno mijenja.
+            result.append(list(current_subset))  
             return
 
-        # Odluka 1: Uključi trenutni broj u podskup
+        # ODLUKA 1: Uključi trenutni broj (nums[index]) u naš podskup
         current_subset.append(nums[index])
+        
+        # Idemo dublje u rekurziju na idući broj s uključenim trenutnim brojem
         backtrack(index + 1, current_subset)
 
-        # Backtrack korak: izbaci ga van da bismo probali drugu odluku
+        # BACKTRACK KORAK (Povratak): Izbaci zadnji dodani broj van!
+        # Ovo radimo jer se vraćamo korak unatrag u stablu odluka i čistimo 
+        # listu kako bismo je pripremili za drugu opciju (opciju bez tog broja).
         current_subset.pop()
 
-        # Odluka 2: Preskoči trenutni broj
+        # ODLUKA 2: Preskoči trenutni broj
+        # Idemo dublje u rekurziju na idući broj, ali ovaj put bez tog broja u listi
         backtrack(index + 1, current_subset)
 
-    # Pokrećemo algoritam s indeksom 0 i praznom listom
+    # Algoritam pokrećemo od prvog elementa (indeks 0) i s praznom početnom listom
     backtrack(0, [])
     return result
