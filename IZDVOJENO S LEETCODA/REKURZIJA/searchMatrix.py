@@ -1,51 +1,24 @@
-# ==============================================================================
-# ZADATAK: 240. Search a 2D Matrix II (Divide & Conquer / Eliminacija)
-#
-# TEKST ZADATKA:
-# Napisite funkciju searchMatrix(matrix, target) koja pretrazuje vrijednost
-# 'target' u dvodimenzionalnoj matrici cijelih brojeva. Matrica ima sljedeca 
-# svojstva:
-# 1. Cijeli brojevi u svakom retku su sortirani uzlazno slijeva nadesno.
-# 2. Cijeli brojevi u svakom stupcu su sortirani uzlazno odozgo prema dolje.
-#
-# PRIMJER:
-# matrix = [
-#   [1,   4,  7, 11, 15],
-#   [2,   5,  8, 12, 19],
-#   [3,   6,  9, 16, 22]
-# ]
-# target = 5 -> Vraca: True
-# target = 20 -> Vraca: False
-# ==============================================================================
-
-def searchMatrix(matrix, target):
-    # Ako je matrica prazna, odmah vracamo False
-    if not matrix or not matrix[0]:
-        return False
-
-    # KLJUCNI TRIK ZA ISPIT: Pocinjemo iz gornjeg desnog kuta matrice!
-    # Iz ove pozicije imamo jedinstveno svojstvo: 
-    # Svi elementi lijevo su MANJI, a svi elementi dolje su VECI.
-    row = 0
-    col = len(matrix[0]) - 1
-
-    # Petlja radi dok god smo unutar granica matrice
-    while row < len(matrix) and col >= 0:
-        # 1. SLUCAJ: Pronasli smo trazeni broj
+def searchMatrixRekurzivno(matrix, target):
+    # Pomoćna funkcija koja glumi petlju kroz rekurziju
+    def trazi(row, col):
+        # BAZNI SLUČAJ 1: Izašli smo iz granica matrice (element nije pronađen)
+        if row >= len(matrix) or col < 0:
+            return False
+            
+        # BAZNI SLUČAJ 2: Pronašli smo target
         if matrix[row][col] == target:
             return True
             
-        # 2. SLUCAJ: Trenutni broj je VECI od targeta.
-        # Buduci da su svi brojevi u tom stupcu prema dolje jos veci (jer je stupac sortiran),
-        # sigurni smo da se target ne nalazi u ovom stupcu. Eliminiramo cijeli stupac (idemo lijevo).
+        # REKURZIVNI KORAK 1: Element je prevelik, eliminiraj stupac (idi lijevo)
         elif matrix[row][col] > target:
-            col -= 1  
+            return trazi(row, col - 1)  # Poziv same sebe!
             
-        # 3. SLUCAJ: Trenutni broj je MANJI od targeta.
-        # Buduci da su svi brojevi u tom retku ulijevo jos manji (jer je redak sortiran),
-        # sigurni smo da se target ne nalazi u ovom retku. Eliminiramo cijeli redak (idemo dolje).
+        # REKURZIVNI KORAK 2: Element je premali, eliminiraj red (idi dolje)
         else:
-            row += 1  
+            return trazi(row + 1, col)  # Poziv same sebe!
 
-    # Ako smo izasli iz granica matrice, a nismo pronasli broj, on ne postoji
-    return False
+    if not matrix or not matrix[0]:
+        return False
+        
+    # Pokrećemo rekurziju iz gornjeg desnog kuta (red 0, zadnji stupac)
+    return trazi(0, len(matrix[0]) - 1)
