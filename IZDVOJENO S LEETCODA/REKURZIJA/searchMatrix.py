@@ -1,4 +1,4 @@
-def searchMatrixRekurzivno(matrix, target):
+def searchMatrix(matrix, target):
     # Pomoćna funkcija koja glumi petlju kroz rekurziju
     def trazi(row, col):
         # BAZNI SLUČAJ 1: Izašli smo iz granica matrice (element nije pronađen)
