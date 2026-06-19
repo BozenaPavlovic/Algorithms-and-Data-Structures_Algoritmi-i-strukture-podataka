@@ -11,24 +11,20 @@
 # Proširena lista:  2 10 8 20 12 21 9 16 7
 # ==============================================================================
 
-    def prosiri(self):
-        # Ako je lista prazna ili ima samo 1 element, nema se između čega zbrajati
-        if self.glava is None or self.glava.sljedeci is None:
-            return
-            
-        curr = self.glava
-        
-        # Petlja radi dok god postoji desni susjed
-        while curr.sljedeci is not None:
-            lijeva_vrijednost = curr.podatak
-            desna_vrijednost = curr.sljedeci.podatak
-            suma = lijeva_vrijednost + desna_vrijednost
-            
-            # Stvaramo novi čvor koji već pokazuje na desnog susjeda
-            novi_cvor = Cvor(suma, curr.sljedeci)
-            
-            # Lijevi čvor sada usmjeravamo na naš novi čvor
-            curr.sljedeci = novi_cvor
-            
-            # Pomakni curr na desnog susjeda (preskačemo novi čvor)
-            curr = novi_cvor.sljedeci
+
+def expand(self):
+    if self.head is None or self.head.next_node is None:
+        return
+
+    curr = self.head
+
+    while curr.next_node is not None:
+        left_value = curr.data
+        right_value = curr.next_node.data
+        total = left_value + right_value
+
+        new_node = Node(total, curr.next_node)
+
+        curr.next_node = new_node
+
+        curr = new_node.next_node
