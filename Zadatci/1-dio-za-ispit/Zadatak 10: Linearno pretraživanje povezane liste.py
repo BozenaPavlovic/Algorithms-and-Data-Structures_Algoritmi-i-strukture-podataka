@@ -8,18 +8,19 @@
 # indeks (poziciju) elementa ako je u listi, a -1 ako element nije u listi.
 # ==============================================================================
 
-class JednostrukoPovezanaLista:
+class SinglyLinkedList:
     def __init__(self):
-        self.glava = None
+        self.head = None
 
     def pretrazivanje(self, element):
-        curr = self.glava
-        indeks = 0
-        
-        while curr is not None:
-            if curr.podatak == element:
-                return indeks
-            curr = curr.sljedeci  # Napomena: u tekstu piše 'sljedeci'
-            indeks += 1
-            
+        current = self.head
+        index = 0
+
+        while current is not None:
+            if current.data == element:
+                return index
+
+            current = current.next_node
+            index += 1
+
         return -1
