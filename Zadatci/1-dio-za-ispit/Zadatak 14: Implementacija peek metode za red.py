@@ -7,18 +7,14 @@
 # Smiju se koristiti samo osnovne funkcije za rad s redovima: dodaj i skini.
 # ==============================================================================
 
-def peek_reda(red):
-    if red.velicina() == 0:
+def peek_queue(queue):
+    if len(queue) == 0:
         return None
-        
-    # Skinemo prvi element (to je naš traženi element na izlazu)
-    prvi = red.skini()
-    
-    # Privremeno ga stavimo na kraj reda
-    red.dodaj(prvi)
-    
-    # Rotiramo sve ostale elemente kružno da se početni redoslijed vrati
-    for _ in range(red.velicina() - 1):
-        red.dodaj(red.skini())
-        
-    return prvi
+
+    front = queue.dequeue()
+    queue.enqueue(front)
+
+    for _ in range(len(queue) - 1):
+        queue.enqueue(queue.dequeue())
+
+    return front
