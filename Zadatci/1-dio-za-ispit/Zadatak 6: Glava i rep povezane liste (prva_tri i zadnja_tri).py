@@ -9,28 +9,40 @@
 # 0 elemenata (ako je lista prazna).
 # ==============================================================================
 
-class Cvor:
-    def __init__(self, podatak=None, sljedeci=None):
-        self.podatak = podatak
-        self.sljedeci = sljedeci
+class Node:
+    def __init__(self, data=None, next_node=None):
+        # Inicijalizacija čvora povezane liste
+        # data: sprema vrijednost elementa
+        # next_node: pokazivač na idući čvor u listi
+        self.data = data
+        self.next_node = next_node
 
-def prva_tri(glava):
-    rezultat = []
-    curr = glava
-    # Uzimamo elemente dok ne skupimo 3 ili dok ne dođemo do kraja liste
-    while curr is not None and len(rezultat) < 3:
-        rezultat.append(curr.podatak)
-        curr = curr.sljedeci
-    return tuple(rezultat)
 
-def zadnja_tri(glava):
-    # Prvo skupimo sve elemente liste u običnu Python listu
-    svi_elementi = []
-    curr = glava
-    while curr is not None:
-        svi_elementi.append(curr.podatak)
-        curr = curr.sljedeci
+def first_three(head):
+    # Funkcija vraća prva tri elementa liste kao ntorku (tuple)
+    result = []
+    curr = head
     
-    # Uzimamo zadnja tri elementa pomoću isječka (slice)
-    # Ako lista ima manje od 3 elementa, [-3:] će uzeti sve što ima
-    return tuple(svi_elementi[-3:])
+    # Prolazimo kroz listu i uzimamo elemente
+    # Zaustavljamo se ako je lista gotova ili ako već imamo 3 elementa
+    while curr is not None and len(result) < 3:
+        result.append(curr.data)
+        curr = curr.next_node
+        
+    return tuple(result)
+
+
+def last_three(head):
+    # Funkcija vraća zadnja tri elementa liste kao ntorku (tuple)
+    # Koristimo pomoćnu listu za skupljanje svih vrijednosti
+    all_elements = []
+    curr = head
+    
+    # Prolazimo kroz cijelu povezanu listu od početka do kraja
+    while curr is not None:
+        all_elements.append(curr.data)
+        curr = curr.next_node
+        
+    # Python isječak (slice) [-3:] sigurno vraća zadnja 3 elementa.
+    # Ako lista ima manje od 3 elementa, vratit će sve postojeće elemente.
+    return tuple(all_elements[-3:])
