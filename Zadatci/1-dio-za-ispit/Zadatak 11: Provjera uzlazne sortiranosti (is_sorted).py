@@ -8,20 +8,21 @@
 # je prazna ili ako nije sortirana.
 # ==============================================================================
 
-    def is_sorted(self):
-        # Ako je lista prazna, po tekstu zadatka vraća False
-        if self.glava is None:
-            return False
-            
-        # Ako sadrži samo jedan element, sortirana je (vraća True)
-        if self.glava.sljedeci is None:
-            return True
-            
-        curr = self.glava
-        # Uspoređujemo trenutni čvor s njegovim sljedbenikom
-        while curr.sljedeci is not None:
-            if curr.podatak > curr.sljedeci.podatak:
-                return False  # Čim nađemo element veći od idućeg, nije sortirano
-            curr = curr.sljedeci
-            
+def is_sorted(self):
+    # empty list -> False
+    if self.head is None:
+        return False
+
+    # one element -> True
+    if self.head.next_node is None:
         return True
+
+    curr = self.head
+
+    while curr.next_node is not None:
+        if curr.data > curr.next_node.data:
+            return False
+
+        curr = curr.next_node
+
+    return True
