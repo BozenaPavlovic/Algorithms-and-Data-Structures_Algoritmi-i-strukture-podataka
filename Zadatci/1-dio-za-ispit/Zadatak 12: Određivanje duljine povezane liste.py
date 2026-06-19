@@ -6,10 +6,12 @@
 # pod pretpostavkom da ne postoji atribut u kojem je spremljen taj podatak.
 # ==============================================================================
 
-    def duljina(self):
-        brojac = 0
-        curr = self.glava
-        while curr is not None:
-            brojac += 1
-            curr = curr.sljedeci
-        return brojac
+def length(self):
+    count = 0
+    curr = self.head
+
+    while curr is not None:
+        count += 1
+        curr = curr.next_node
+
+    return count
