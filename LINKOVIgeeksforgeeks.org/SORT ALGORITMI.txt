@@ -1,0 +1,15 @@
+SORT ALGORITMI 
+
+INSERTION SORT
+https://www.geeksforgeeks.org/dsa/insertion-sort-algorithm/
+https://www.geeksforgeeks.org/dsa/insertion-sort-for-singly-linked-list/
+https://www.geeksforgeeks.org/dsa/insertion-sort-doubly-linked-list/
+
+MERGE
+https://www.geeksforgeeks.org/dsa/merge-sort
+https://www.geeksforgeeks.org/dsa/merge-sort-for-linked-list/
+https://www.geeksforgeeks.org/dsa/merge-sort-for-doubly-linked-list/
+
+
+BUCKET SORT
+https://www.geeksforgeeks.org/dsa/bucket-sort-2/
