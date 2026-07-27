@@ -16,3 +16,17 @@ https://www.geeksforgeeks.org/dsa/bucket-sort-2/
 
 QUICK SORT
 https://www.geeksforgeeks.org/dsa/quicksort-on-singly-linked-list/
+https://stackoverflow.com/questions/71162048/quick-sort-on-a-doubly-linked-list-python
+
+SELECTION SORT
+https://www.geeksforgeeks.org/dsa/iterative-selection-sort-for-linked-list/
+
+[Expected Approach - 1] Swapping node Values – ovo je osnovna verzija koja radi na jednostruko povezanoj listi (Singly Linked List). Ona mijenja samo vrijednosti podataka između čvorova, dok same poveznice (linkovi) ostaju iste. Ovo je jednostavnije i univerzalno.
+
+[Expected Approach - 2] Changing node Links – ovo je naprednija verzija koja također radi na jednostruko povezanoj listi, ali mijenja poveznice (linkove) između čvorova kako bi ih presložila, umjesto da mijenja podatke. Ovo je poželjnije kada radite sa strukturama gdje je preskupo kopirati podatke.
+
+
+
+
+
+
