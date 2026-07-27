@@ -13,3 +13,6 @@ https://www.geeksforgeeks.org/dsa/merge-sort-for-doubly-linked-list/
 
 BUCKET SORT
 https://www.geeksforgeeks.org/dsa/bucket-sort-2/
+
+QUICK SORT
+https://www.geeksforgeeks.org/dsa/quicksort-on-singly-linked-list/
