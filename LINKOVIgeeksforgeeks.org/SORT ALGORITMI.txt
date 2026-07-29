@@ -16,7 +16,7 @@ https://www.geeksforgeeks.org/dsa/bucket-sort-2/
 
 QUICK SORT
 https://www.geeksforgeeks.org/dsa/quicksort-on-singly-linked-list/
-https://stackoverflow.com/questions/71162048/quick-sort-on-a-doubly-linked-list-python
+https://www.geeksforgeeks.org/dsa/quicksort-for-linked-list/
 
 SELECTION SORT
 https://www.geeksforgeeks.org/dsa/iterative-selection-sort-for-linked-list/
