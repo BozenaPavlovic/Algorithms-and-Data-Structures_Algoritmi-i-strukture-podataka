@@ -11,8 +11,7 @@ def split(head):
     # one step until fast reaches the end
     while fast and fast.next:
         fast = fast.next.next
-        if fast:
-            slow = slow.next
+        slow = slow.next
 
     # Split the list into two halves
     second = slow.next
@@ -52,23 +51,3 @@ def mergeSort(head):
     # Merge the two sorted halves
     return merge(head, second)
 
-def printList(head):
-    curr = head
-    while curr is not None:
-        print(curr.data, end=" ")
-        if curr.next:
-            print("->", end=" ")
-        curr = curr.next
-    print()
-
-
-if __name__ == "__main__":
-    # Create a hard-coded singly linked list:
-    # 9 -> 8 -> 5 -> 2
-    head = Node(9)
-    head.next = Node(8)
-    head.next.next = Node(5)
-    head.next.next.next = Node(2)
-
-    head = mergeSort(head)
-    printList(head)
