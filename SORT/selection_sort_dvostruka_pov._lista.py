@@ -1,10 +1,20 @@
-class Node:
+# ==============================================================================
+# VERZIJA 3: DVOSTRUKO POVEZANA LISTA + ZAMJENA PODATAKA (DATA SWAP)
+# 
+# PREPOZNAVANJE:
+# 1. Čvorovi sadrže i '.next' i '.prev' pokazivače.
+# 2. Kod je u potpunosti IDENTIČAN verziji 1 (jednostruka lista + data swap).
+# 3. Budući da prepisujemo isključivo '.data' vrijednosti, struktura pokazivača 
+#    se ne mijenja, pa '.prev' pokazivač uopće ne moramo dirati niti koristiti.
+# ==============================================================================
+
+class DoublyNode:
     def __init__(self, data):
         self.data = data
-        self.prev = None
         self.next = None
+        self.prev = None
 
-def selection_sort(head):
+def selection_sort_double_data(head):
     if head is None or head.next is None:
         return head
     
@@ -26,65 +36,50 @@ def selection_sort(head):
     return head
 
 
+# ==============================================================================
+# VERZIJA 4: DVOSTRUKO POVEZANA LISTA + ZAMJENA POKAZIVAČA (POINTER SWAP)
+# 
+# PREPOZNAVANJE:
+# 1. Koristi se ista logika izrezivanja i dodavanja kao u verziji 2.
+# 2. Kod izrezivanja i dodavanja 'min_node' moramo ažurirati i '.prev' pokazivače.
+# 3. Kod je olakšan jer nam ne treba lokalna varijabla 'prev_min' kao kod jednostruke, 
+#    budući da čvor sam zna svog prethodnika preko 'min_node.prev'.
+# ==============================================================================
 
-
-
-# DOUBLY LINKED LIST
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.prev = None
-        self.next = None
-
-def selection_sort(head):
+def selection_sort_double_pointers(head):
     if head is None or head.next is None:
         return head
 
     tail = None
-    current = head
+    start = head
 
-    while current is not None:
-        small = current
-        prev_small = None
-        prev = current
-        temp = current.next
+    while start is not None:
+        min_node = start
+        current = start.next
 
-        # Traži minimum (isti kod kao za jednostruku)
-        while temp is not None:
-            if temp.data < small.data:
-                small = temp
-                prev_small = prev
-            prev = temp
-            temp = temp.next
-
-        # Izbaci minimum (isti kod)
-        if small == current:
+        # Unutarnja petlja: traži minimum
+        while current is not None:
+            if current.data < min_node.data:
+                min_node = current
             current = current.next
-        else:
-            prev_small.next = small.next
-            if small.next is not None:
-                small.next.prev = prev_small   # 🟢 DODATAK za dvostruku
 
-        # Dodaj minimum na kraj
+        # Izbacivanje min_node iz nesortiranog dijela liste
+        if min_node == start:
+            start = start.next
+        else:
+            # Prespajanje pokazivača prema naprijed i unazad
+            min_node.prev.next = min_node.next
+            if min_node.next is not None:
+                min_node.next.prev = min_node.prev
+
+        # Dodavanje min_node na kraj sortiranog dijela (tail)
         if tail is None:
-            head = small
-            small.prev = None                  # 🟢 DODATAK za dvostruku
+            head = min_node
+            min_node.prev = None
         else:
-            tail.next = small
-            small.prev = tail                  # 🟢 DODATAK za dvostruku
+            tail.next = min_node
+            min_node.prev = tail
 
-        tail = small
+        tail = min_node
 
     return head
-
-
-
-
-
-
-
-
-
-
-
-
