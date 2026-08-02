@@ -28,9 +28,7 @@ def bubble_sort(head):
               
                 # Swap the data of the current node
                 # and next node
-                curr.data, curr.next.data = (
-                    curr.next.data, curr.data
-                )
+                curr.data, curr.next.data = curr.next.data, curr.data
                 swapped = True
             curr = curr.next
 
