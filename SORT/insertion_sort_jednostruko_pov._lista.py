@@ -1,56 +1,71 @@
-# https://www.geeksforgeeks.org/dsa/python-program-for-insertion-sort-in-a-singly-linked-list/
-
-
-
+# ==============================================================================
+# VERZIJA 1: JEDNOSTRUKO POVEZANA LISTA + ZAMJENA PODATAKA (DATA SWAP)
+# 
+# PREPOZNAVANJE: 
+# 1. Koristi ugniježđene petlje gdje 'current' prolazi kroz cijelu listu od početka.
+# 2. Unutarnja petlja 'start' svaki put kreće od 'head' i ide do 'current'.
+# 3. Ako je podatak u 'start' veći od podataka u 'current', njihove '.data' vrijednosti 
+#    se zamjenjuju. Pokazivači '.next' se NE DIRAJU.
+# ==============================================================================
 
 class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
 
-def insertion_sort_linked_list(head):
-    sorted_list = None
-    current = head
+def insertion_sort_single_data(head):
+    if head is None or head.next is None:
+        return head
     
+    current = head.next
     while current is not None:
-        # Store next node to avoid losing reference
-        next_node = current.next
+        start = head
+        # Prolazimo kroz već sortirani dio liste ispred 'current'
+        while start != current:
+            if start.data > current.data:
+                # Zamjena podataka (data swap)
+                start.data, current.data = current.data, start.data
+            start = start.next
+        current = current.next
         
-        # Insert current node into the sorted list
-        if sorted_list is None or current.data < sorted_list.data:
-            current.next = sorted_list
-            sorted_list = current
+    return head
+
+
+# ==============================================================================
+# VERZIJA 2: JEDNOSTRUKO POVEZANA LISTA + ZAMJENA POKAZIVAČA (POINTER SWAP)
+# 
+# PREPOZNAVANJE:
+# 1. Kreira se potpuno nova prazna lista 'sorted_head = None'.
+# 2. Uzimamo jedan po jedan čvor iz originalne liste i tražimo mu ispravno mjesto 
+#    unutar nove 'sorted_head' liste prolaskom s 'prev' i 'current' od početka.
+# 3. Fizički se mijenjaju '.next' pokazivači kako bi se čvor umetnuo između dva čvora.
+# ==============================================================================
+
+def insertion_sort_single_pointers(head):
+    if head is None or head.next is None:
+        return head
+
+    sorted_head = None # Početak nove, sortirane liste
+    current = head     # Čvor kojeg trenutno umećemo
+
+    while current is not None:
+        next_node = current.next # Spremo idući jer ćemo current.next prepisati
+        
+        # Tražimo mjesto za umetanje unutar sortirane liste
+        if sorted_head is None or sorted_head.data >= current.data:
+            # Umetanje na sam početak sortirane liste
+            current.next = sorted_head
+            sorted_head = current
         else:
-            # Find the correct position in the sorted list
-            before = sorted_list
-            while before.next is not None and before.next.data < current.data:
-                before = before.next
-            current.next = before.next
-            before.next = current
-        
-        # Move to the next node in the original list
+            # Traženje pozicije u sredini ili na kraju sortirane liste
+            prev = sorted_head
+            while prev.next is not None and prev.next.data < current.data:
+                prev = prev.next
+                
+            # Umetanje čvora između 'prev' i 'prev.next'
+            current.next = prev.next
+            prev.next = current
+            
         current = next_node
-        
-    return sorted_list
 
-# Example Usage
-def print_list(head):
-    temp = head
-    while temp:
-        print(temp.data, end=" -> " if temp.next else "\n")
-        temp = temp.next
-
-# Create list: 5 -> 3 -> 4 -> 1 -> 2
-head = Node(5)
-head.next = Node(3)
-head.next.next = Node(4)
-head.next.next.next = Node(1)
-head.next.next.next.next = Node(2)
-
-print("Unsorted:")
-print_list(head)
-
-head = insertion_sort_linked_list(head)
-
-print("Sorted:")
-print_list(head)   
+    return sorted_head
