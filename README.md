@@ -5,7 +5,7 @@ Stvari za učenje na jednom mijestu
 ## Dva ključna uvjeta (pravila) na ispitu
 Kada u tekstu zadatka dobijete algoritam, prvo morate provjeriti na koji način smijete modificirati listu:
 
-   1. Verzija sa zamjenom podataka (data swap) – Profesorovo rješenje
+   1. Verzija sa zamjenom podataka (data swap)
    * Uvjet: Čvorovi ostaju na fiksnim adresama u memoriji, a mijenjaju se samo njihove vrijednosti.
       * Prepoznavanje u zadatku: Ako profesor u tekstu ne naglasi "preusmjeravanjem pokazivača" ili ako u službenom rješenju koristi izraz poput node1.data, node2.data = node2.data, node1.data.
       * Prednost: Puno jednostavnije za pisanje jer je logika petlji identična onoj za obična polja (arrays).
