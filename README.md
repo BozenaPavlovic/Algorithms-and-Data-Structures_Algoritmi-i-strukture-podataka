@@ -14,7 +14,9 @@ Kada u tekstu zadatka dobijete algoritam, prvo morate provjeriti na koji način 
       * Prepoznavanje u zadatku: Profesor će eksplicitno naglasiti: "Sortirati listu promjenom strukture/pokazivača, a ne zamjenom podataka".
    
 ------------------------------
-## Pregled svih algoritama za ispit (Jednostruko vs. Dvostruko povezana lista)## 1. BUBBLE SORT (Sortiranje mjehurićima)
+## Pregled svih algoritama za ispit (Jednostruko vs. Dvostruko povezana lista)
+
+## 1. BUBBLE SORT (Sortiranje mjehurićima)
 
 * Logika: Prolazi kroz listu i uspoređuje susjedne čvorove (current i current.next). Ako su u neispravnom poretku, zamjenjuje ih. Postupak se ponavlja sve dok ima zamjena (swapped = True).
 * Uvjet za jednostruku listu: Kreće se isključivo prema naprijed (current = current.next).
