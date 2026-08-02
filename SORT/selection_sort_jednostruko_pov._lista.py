@@ -1,10 +1,19 @@
-# ovo je jednostviji bez diranja memorije
+# ==============================================================================
+# VERZIJA 1: JEDNOSTRUKO POVEZANA LISTA + ZAMJENA PODATAKA (DATA SWAP)
+# 
+# PREPOZNAVANJE: 
+# 1. Vanjska petlja s 'start' fiksira poziciju, a unutarnja s 'current' traži minimum.
+# 2. Kada se pronađe 'min_node', zamjenjuju se isključivo '.data' vrijednosti:
+#    'start.data, min_node.data = min_node.data, start.data'
+# 3. Pokazivači '.next' ostaju netaknuti. Čvorovi ne mijenjaju mjesta u memoriji.
+# ==============================================================================
+
 class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
 
-def selection_sort(head):
+def selection_sort_single_data(head):
     if head is None or head.next is None:
         return head
     
@@ -13,11 +22,13 @@ def selection_sort(head):
         min_node = start
         current = start.next
         
+        # Traženje najmanjeg elementa u ostatku liste
         while current is not None:
             if current.data < min_node.data:
                 min_node = current
             current = current.next
         
+        # Zamjena podataka ako je pronađen manji element
         if min_node != start:
             start.data, min_node.data = min_node.data, start.data
         
@@ -26,57 +37,51 @@ def selection_sort(head):
     return head
 
 
-# teža verzija koja dira memoriju i pokazivače
 
-# SINGLY LINKED LIST
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.next = None   # SAMO next, NEMA prev!
+# ==============================================================================
+# VERZIJA 2: JEDNOSTRUKO POVEZANA LISTA + ZAMJENA POKAZIVAČA (POINTER SWAP)
+# 
+# PREPOZNAVANJE:
+# 1. '.data' je zaključan. Umjesto zamjene vrijednosti, fizički "izrezujemo" 
+#    pronađeni 'min_node' iz nesortiranog dijela i dodajemo ga na kraj sortiranog dijela.
+# 2. Moramo pratiti prethodnika od minimuma ('prev_min') kako bismo ga mogli izrezati.
+# 3. Koristimo 'tail' pokazivač koji označava kraj novog, sortiranog dijela liste.
+# ==============================================================================
 
-def selection_sort(head):
+def selection_sort_single_pointers(head):
     if head is None or head.next is None:
         return head
 
-    tail = None          # Zadnji čvor sortiranog dijela
-    current = head       # Prvi čvor nesortiranog dijela
+    tail = None          # Kraj sortiranog dijela liste
+    start = head         # Početak nesortiranog dijela liste
 
-    while current is not None:
-        # Traži minimum i ZAPAMTI njegovog prethodnika
-        small = current
-        prev_small = None    # Pomoćna varijabla, NIJE dio čvora
-        prev = current       # Pomoćna varijabla
-        temp = current.next
+    while start is not None:
+        min_node = start
+        prev_min = None  # Prati čvor ispred min_node
+        
+        prev = start
+        current = start.next
 
-        while temp is not None:
-            if temp.data < small.data:
-                small = temp
-                prev_small = prev   # Pamti prethodnika za min
-            prev = temp
-            temp = temp.next
-
-        # Izbaci minimum iz nesortiranog dijela
-        if small == current:
+        # Unutarnja petlja: traži minimum i pamti njegovog prethodnika
+        while current is not None:
+            if current.data < min_node.data:
+                min_node = current
+                prev_min = prev
+            prev = current
             current = current.next
-        else:
-            prev_small.next = small.next   # preskoči min
 
-        # Dodaj minimum na kraj sortiranog dijela
+        # Izbacivanje (izrezivanje) min_node iz nesortiranog dijela
+        if min_node == start:
+            start = start.next
+        else:
+            prev_min.next = min_node.next
+
+        # Dodavanje min_node na kraj sortiranog dijela (tail)
         if tail is None:
-            head = small
+            head = min_node
         else:
-            tail.next = small
+            tail.next = min_node
 
-        tail = small
+        tail = min_node
 
     return head
-
-
-
-
-
-
-
-
-
-
