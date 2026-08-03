@@ -1,5 +1,3 @@
-# Bubble sort za jednostruko povezanu listu (data-swap verzija)
-
 class Node:
     def __init__(self, data):
         self.data = data
@@ -9,60 +7,69 @@ class LinkedList:
     def __init__(self):
         self.head = None
 
-    def append(self, value):
-        """Dodaj vrijednost na kraj liste."""
-        node = Node(value)
-        if not self.head:
-            self.head = node
+    def bucket_sort(self, bucket_count):
+        if self.head is None or self.head.next is None or bucket_count < 1:
             return
+
+        # 1. min i max
         cur = self.head
-        while cur.next:
+        min_val = max_val = cur.data
+        while cur:
+            if cur.data < min_val: min_val = cur.data
+            if cur.data > max_val: max_val = cur.data
             cur = cur.next
-        cur.next = node
+        if min_val == max_val:
+            return
 
-    @classmethod
-    def from_list(cls, values):
-        ll = cls()
-        for v in values:
-            ll.append(v)
-        return ll
+        # 2. kreiraj buckete (heads)
+        buckets = [None] * bucket_count
 
-    def to_list(self):
-        out = []
+        # 3. raspodijeli čvorove (push-front)
         cur = self.head
         while cur:
-            out.append(cur.data)
-            cur = cur.next
-        return out
+            nxt = cur.next
+            idx = int((cur.data - min_val) * bucket_count / (max_val - min_val))
+            if idx < 0: idx = 0
+            if idx >= bucket_count: idx = bucket_count - 1
+            cur.next = buckets[idx]
+            buckets[idx] = cur
+            cur = nxt
 
-    def bubble_sort(self):
-        """
-        Bubble sort koji radi samo zamjenu polja `data` između čvorova.
-        Efikasnija varijanta: prekidamo ako u prolazu nema zamjena i
-        sužavamo opseg pomoću end markera.
-        Sortira rastuće.
-        """
-        if self.head is None or self.head.next is None:
-            return
+        # helper: insertion sort by data-swap za singly list (ascending)
+        def insertion_sort_data_swap(head):
+            if head is None or head.next is None:
+                return head
+            current = head.next
+            while current:
+                key = current.data
+                node = head
+                while node is not current:
+                    if node.data > key:
+                        node.data, key = key, node.data
+                    node = node.next
+                current.data = key
+                current = current.next
+            return head
 
-        end = None
-        while end != self.head:
-            swapped = False
-            cur = self.head
-            while cur.next != end:
-                if cur.data > cur.next.data:
-                    # zamijeni samo podatke (data swap)
-                    cur.data, cur.next.data = cur.next.data, cur.data
-                    swapped = True
-                cur = cur.next
-            end = cur  # posljednji element je sada na svom mjestu
-            if not swapped:
-                break
+        # 4. sort svaki bucket (data-swap)
+        for i in range(bucket_count):
+            if buckets[i] is not None:
+                buckets[i] = insertion_sort_data_swap(buckets[i])
 
-# Primjer upotrebe
-if __name__ == "__main__":
-    values = [3, 1, 4, 2, 5]
-    ll = LinkedList.from_list(values)
-    print("Prije:", ll.to_list())
-    ll.bubble_sort()
-    print("Poslije:", ll.to_list())
+        # 5. konkateniraj buckete
+        new_head = None
+        new_tail = None
+        for i in range(bucket_count):
+            b = buckets[i]
+            if b is None: continue
+            if new_head is None:
+                new_head = b
+            else:
+                new_tail.next = b
+            # pomakni tail do kraja bucketa
+            t = b
+            while t.next:
+                t = t.next
+            new_tail = t
+
+        self.head = new_head
