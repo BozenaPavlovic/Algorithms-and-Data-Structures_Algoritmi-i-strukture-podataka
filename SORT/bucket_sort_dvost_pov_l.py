@@ -1,184 +1,146 @@
-class Node:
-    """Čvor dvostruko povezane liste."""
+# ==============================================================================
+# BUCKET SORT - DVOSTRUKO POVEZANA LISTA (DATA SWAP)
+# ==============================================================================
+
+class DoublyNode:
     def __init__(self, data):
         self.data = data
         self.next = None
-        self.prev = None  # Dodan pokazivač na prethodni čvor
+        self.prev = None
 
 
 class DoublyLinkedList:
-    """Klasa koja upravlja dvostruko povezanim čvorovima."""
     def __init__(self):
         self.head = None
 
-    def append(self, data):
-        """Dodavanje elementa na kraj dvostruko povezane liste."""
-        new_node = Node(data)
-        if not self.head:
-            self.head = new_node
-            return
-        last = self.head
-        while last.next:
-            last = last.next
-        last.next = new_node
-        new_node.prev = last  # Postavljanje povratne veze
 
-    def print_forward(self):
-        """Ispisuje listu od početka prema kraju."""
-        current = self.head
-        elements = []
-        while current:
-            elements.append(str(current.data))
-            current = current.next
-        print("Naprijed: " + " <-> ".join(elements) + " -> None")
+# ==============================================================================
+# POMOĆNA FUNKCIJA: INSERTION SORT NA POVEZANOJ LISTI (DATA SWAP)
+# ==============================================================================
 
-    def print_backward(self):
-        """Ispisuje listu od kraja prema početku (provjera ispravnosti 'prev' veza)."""
-        if not self.head:
-            print("Natrag: None")
-            return
-        last = self.head
-        while last.next:
-            last = last.next
-        
-        elements = []
-        while last:
-            elements.append(str(last.data))
-            last = last.prev
-        print("Natrag:   " + " <-> ".join(elements) + " -> None")
-
-
-def sorted_insert(head, new_node):
-    """Pomoćna funkcija: Umeće čvor u već sortiranu dvostruku listu."""
-    # Resetiramo veze novog čvora za svaki slučaj
-    new_node.next = None
-    new_node.prev = None
-
-    # Slučaj 1: Lista je prazna ili novi čvor dolazi na sam početak
-    if head is None:
-        return new_node
+def insertion_sort(head):
+    """
+    Insertion sort na povezanoj listi (DATA SWAP).
+    Mijenja se samo .data, pokazivači ostaju isti.
+    """
+    if head is None or head.next is None:
+        return head
     
-    if head.data >= new_node.data:
-        new_node.next = head
-        head.prev = new_node
-        return new_node
-
-    # Slučaj 2: Traženje pozicije unutar ili na kraju liste
+    # Uzmi podatke u pomoćnu listu (ovo je data swap)
+    data_list = []
     current = head
-    while current.next is not None and current.next.data < new_node.data:
+    while current is not None:
+        data_list.append(current.data)
         current = current.next
-
-    # Umetanje čvora nakon 'current' čvora
-    new_node.next = current.next
-    if current.next is not None:
-        current.next.prev = new_node
-        
-    current.next = new_node
-    new_node.prev = current
+    
+    # Insertion sort na listi podataka
+    for i in range(1, len(data_list)):
+        key = data_list[i]
+        j = i - 1
+        while j >= 0 and data_list[j] > key:
+            data_list[j + 1] = data_list[j]
+            j -= 1
+        data_list[j + 1] = key
+    
+    # Vrati podatke natrag u čvorove (DATA SWAP)
+    current = head
+    for val in data_list:
+        current.data = val
+        current = current.next
     
     return head
 
 
-def insertion_sort(head):
-    """Sortira dvostruko povezanu listu pomoću Insertion Sorta."""
-    if head is None or head.next is None:
-        return head
+# ==============================================================================
+# POMOĆNA FUNKCIJA: PRONALAŽENJE MIN I MAX
+# ==============================================================================
 
-    sorted_head = None
-    current = head
+def find_min_max(head):
+    """Pronalazi min i max u listi."""
+    if head is None:
+        return None, None
     
-    while current is not None:
-        next_node = current.next  # Spremi referencu prije nego što izmijenimo veze
-        sorted_head = sorted_insert(sorted_head, current)
-        current = next_node
-
-    return sorted_head
-
-
-def bucket_sort_doubly_linked_list(dll, bucket_count=5):
-    """Glavna funkcija za Bucket Sort dvostruko povezane liste."""
-    head = dll.head
-    if head is None or head.next is None:
-        return dll
-
-    # 1. Pronalaženje minimalne i maksimalne vrijednosti
     min_val = head.data
     max_val = head.data
     current = head
-    while current:
+    
+    while current is not None:
         if current.data < min_val:
             min_val = current.data
         if current.data > max_val:
             max_val = current.data
         current = current.next
+    
+    return min_val, max_val
 
+
+# ==============================================================================
+# GLAVNA FUNKCIJA: BUCKET SORT
+# ==============================================================================
+
+def bucket_sort(head, bucket_count):
+    """
+    Bucket sort na dvostruko povezanoj listi (DATA SWAP).
+    """
+    if head is None or head.next is None:
+        return head
+    
+    # 1. Pronađi min i max
+    min_val, max_val = find_min_max(head)
+    
     if min_val == max_val:
-        return dll
-
-    # 2. Inicijalizacija pretinaca (svaki pretinac sadrži glavu podliste)
+        return head
+    
+    # 2. Kreiraj pretince (svaki pretinac je glava povezane liste)
     buckets = [None] * bucket_count
-
-    # 3. Scatter (Razvrstavanje) čvorova u pretince
+    
+    # 3. Raspodijeli čvorove u pretince
     current = head
-    while current:
-        next_node = current.next  # Spremi idući čvor
+    while current is not None:
+        next_node = current.next
         
-        # Izračun indeksa pretinca
+        # Izračunaj indeks pretinca
         bucket_idx = int((current.data - min_val) * (bucket_count - 1) / (max_val - min_val))
         
-        # Umetanje čvora na početak podliste u pretincu (O(1) operacija)
+        # Umetni na početak pretinca
         current.next = buckets[bucket_idx]
-        current.prev = None  # Budući da ide na početak pretinca, nema prethodnika
-        
         if buckets[bucket_idx] is not None:
             buckets[bucket_idx].prev = current
-            
+        current.prev = None
         buckets[bucket_idx] = current
+        
         current = next_node
-
-    # 4. Gather (Skupljanje) i spajanje pretinaca
-    sorted_head = None
-    sorted_tail = None
-
+    
+    # 4. Sortiraj svaki pretinac (Insertion Sort - DATA SWAP)
     for i in range(bucket_count):
         if buckets[i] is not None:
-            # Sortiraj trenutni pretinac
             buckets[i] = insertion_sort(buckets[i])
-
-            # Ako je ovo prvi neprazni pretinac, postavi ga kao početak glavne liste
+    
+    # 5. Spoji sve pretince
+    sorted_head = None
+    sorted_tail = None
+    
+    for i in range(bucket_count):
+        if buckets[i] is not None:
             if sorted_head is None:
                 sorted_head = buckets[i]
             else:
-                # Spajanje trenutnog pretinca na kraj prethodnog (dvosmjerno povezivanje)
                 sorted_tail.next = buckets[i]
                 buckets[i].prev = sorted_tail
-
-            # Pomakni 'sorted_tail' na kraj trenutno spojenog pretinca
+            
+            # Pronađi kraj
             sorted_tail = buckets[i]
             while sorted_tail.next is not None:
                 sorted_tail = sorted_tail.next
-
-    # Ažuriraj glavu originalne liste u objektu
-    dll.head = sorted_head
-    return dll
-
-
-# --- Testiranje algoritma ---
-if __name__ == "__main__":
-    dll = DoublyLinkedList()
     
-    # Dodavanje nesortiranih elemenata
-    test_data = [42, 11, 33, 11, 8, 55, 22]
-    for val in test_data:
-        dll.append(val)
+    return sorted_head
 
-    print("--- Prije sortiranja ---")
-    dll.print_forward()
-    dll.print_backward()
 
-    # Pokretanje Bucket Sorta
-    bucket_sort_doubly_linked_list(dll, bucket_count=5)
+# ==============================================================================
+# METODA UNUTAR KLASE
+# ==============================================================================
 
-    print("\n--- Nakon sortiranja ---")
-    dll.print_forward()
-    dll.print_backward()  # Ako se ispravno ispiše unatrag, sve 'prev' veze rade!
+class DoublyLinkedList:
+    def bucket_sort(self, bucket_count):
+        """Sortira listu Bucket Sort algoritmom (DATA SWAP)."""
+        self.head = bucket_sort(self.head, bucket_count)
