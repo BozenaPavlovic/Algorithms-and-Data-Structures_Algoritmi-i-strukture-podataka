@@ -11,27 +11,6 @@ class DoublyLinkedList:
         self.head = None
         self.tail = None
 
-    def append(self, value):
-        node = DNode(value)
-        if not self.head:
-            self.head = node
-            self.tail = node
-        else:
-            node.prev = self.tail
-            self.tail.next = node
-            self.tail = node
-
-    def is_empty(self):
-        return self.head is None
-
-    def to_list(self):
-        out = []
-        cur = self.head
-        while cur:
-            out.append(cur.data)
-            cur = cur.next
-        return out
-
     def insertion_sort_by_data_swap(self):
         """
         Insertion sort on a doubly linked list using only data swaps.
@@ -78,9 +57,3 @@ def bucket_sort(arr):
             idx += 1
             cur = cur.next
 
-# Primjer upotrebe
-if __name__ == "__main__":
-    arr = [0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434]
-    bucket_sort(arr)
-    print("Sorted array is:")
-    print(" ".join(map(str, arr)))
