@@ -1,146 +1,86 @@
-# ==============================================================================
-# BUCKET SORT - DVOSTRUKO POVEZANA LISTA (DATA SWAP)
-# ==============================================================================
+# Bucket sort with doubly linked list buckets and data-swapping insertion sort
 
-class DoublyNode:
+class DNode:
     def __init__(self, data):
         self.data = data
-        self.next = None
         self.prev = None
-
+        self.next = None
 
 class DoublyLinkedList:
     def __init__(self):
         self.head = None
+        self.tail = None
 
+    def append(self, value):
+        node = DNode(value)
+        if not self.head:
+            self.head = node
+            self.tail = node
+        else:
+            node.prev = self.tail
+            self.tail.next = node
+            self.tail = node
 
-# ==============================================================================
-# POMOĆNA FUNKCIJA: INSERTION SORT NA POVEZANOJ LISTI (DATA SWAP)
-# ==============================================================================
+    def is_empty(self):
+        return self.head is None
 
-def insertion_sort(head):
-    """
-    Insertion sort na povezanoj listi (DATA SWAP).
-    Mijenja se samo .data, pokazivači ostaju isti.
-    """
-    if head is None or head.next is None:
-        return head
-    
-    # Uzmi podatke u pomoćnu listu (ovo je data swap)
-    data_list = []
-    current = head
-    while current is not None:
-        data_list.append(current.data)
-        current = current.next
-    
-    # Insertion sort na listi podataka
-    for i in range(1, len(data_list)):
-        key = data_list[i]
-        j = i - 1
-        while j >= 0 and data_list[j] > key:
-            data_list[j + 1] = data_list[j]
-            j -= 1
-        data_list[j + 1] = key
-    
-    # Vrati podatke natrag u čvorove (DATA SWAP)
-    current = head
-    for val in data_list:
-        current.data = val
-        current = current.next
-    
-    return head
+    def to_list(self):
+        out = []
+        cur = self.head
+        while cur:
+            out.append(cur.data)
+            cur = cur.next
+        return out
 
+    def insertion_sort_by_data_swap(self):
+        """
+        Insertion sort on a doubly linked list using only data swaps.
+        Because nodes have prev pointers, možemo učinkovito pomicati element
+        ulijevo zamjenom podataka bez traženja prethodnika.
+        """
+        if self.head is None or self.head.next is None:
+            return
 
-# ==============================================================================
-# POMOĆNA FUNKCIJA: PRONALAŽENJE MIN I MAX
-# ==============================================================================
+        current = self.head.next
+        while current:
+            j = current
+            # pomakni j ulijevo dok prethodni element ima veći podatak
+            while j.prev and j.prev.data > j.data:
+                j.prev.data, j.data = j.data, j.prev.data
+                j = j.prev
+            current = current.next
 
-def find_min_max(head):
-    """Pronalazi min i max u listi."""
-    if head is None:
-        return None, None
-    
-    min_val = head.data
-    max_val = head.data
-    current = head
-    
-    while current is not None:
-        if current.data < min_val:
-            min_val = current.data
-        if current.data > max_val:
-            max_val = current.data
-        current = current.next
-    
-    return min_val, max_val
+def bucket_sort(arr):
+    n = len(arr)
+    if n == 0:
+        return
 
+    # Kreiramo n bucketa (doubly linked lists)
+    buckets = [DoublyLinkedList() for _ in range(n)]
 
-# ==============================================================================
-# GLAVNA FUNKCIJA: BUCKET SORT
-# ==============================================================================
+    # Distribuiraj elemente u buckete; osiguraj da bi < n
+    for num in arr:
+        bi = int(n * num)
+        if bi >= n:  # u slučaju num == 1.0
+            bi = n - 1
+        buckets[bi].append(num)
 
-def bucket_sort(head, bucket_count):
-    """
-    Bucket sort na dvostruko povezanoj listi (DATA SWAP).
-    """
-    if head is None or head.next is None:
-        return head
-    
-    # 1. Pronađi min i max
-    min_val, max_val = find_min_max(head)
-    
-    if min_val == max_val:
-        return head
-    
-    # 2. Kreiraj pretince (svaki pretinac je glava povezane liste)
-    buckets = [None] * bucket_count
-    
-    # 3. Raspodijeli čvorove u pretince
-    current = head
-    while current is not None:
-        next_node = current.next
-        
-        # Izračunaj indeks pretinca
-        bucket_idx = int((current.data - min_val) * (bucket_count - 1) / (max_val - min_val))
-        
-        # Umetni na početak pretinca
-        current.next = buckets[bucket_idx]
-        if buckets[bucket_idx] is not None:
-            buckets[bucket_idx].prev = current
-        current.prev = None
-        buckets[bucket_idx] = current
-        
-        current = next_node
-    
-    # 4. Sortiraj svaki pretinac (Insertion Sort - DATA SWAP)
-    for i in range(bucket_count):
-        if buckets[i] is not None:
-            buckets[i] = insertion_sort(buckets[i])
-    
-    # 5. Spoji sve pretince
-    sorted_head = None
-    sorted_tail = None
-    
-    for i in range(bucket_count):
-        if buckets[i] is not None:
-            if sorted_head is None:
-                sorted_head = buckets[i]
-            else:
-                sorted_tail.next = buckets[i]
-                buckets[i].prev = sorted_tail
-            
-            # Pronađi kraj
-            sorted_tail = buckets[i]
-            while sorted_tail.next is not None:
-                sorted_tail = sorted_tail.next
-    
-    return sorted_head
+    # Sortiraj svaki bucket koristeći insertion sort sa zamjenom podataka
+    for b in buckets:
+        b.insertion_sort_by_data_swap()
 
+    # Konkateniraj rezultate natrag u arr
+    idx = 0
+    for b in buckets:
+        cur = b.head
+        while cur:
+            arr[idx] = cur.data
+            idx += 1
+            cur = cur.next
 
-# ==============================================================================
-# METODA UNUTAR KLASE
-# ==============================================================================
-
-class DoublyLinkedList:
-    def bucket_sort(self, bucket_count):
-        """Sortira listu Bucket Sort algoritmom (DATA SWAP)."""
-        self.head = bucket_sort(self.head, bucket_count)
+# Primjer upotrebe
+if __name__ == "__main__":
+    arr = [0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434]
+    bucket_sort(arr)
+    print("Sorted array is:")
+    print(" ".join(map(str, arr)))
