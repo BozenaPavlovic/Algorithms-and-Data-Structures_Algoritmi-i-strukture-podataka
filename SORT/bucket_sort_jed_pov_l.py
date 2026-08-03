@@ -1,3 +1,19 @@
+# ==============================================================================
+# BUCKET SORT - JEDNOSTRUKO POVEZANA LISTA
+# ==============================================================================
+# Opis:
+# Bucket sort raspoređuje elemente u više "pretinaca" (bucket-a), zatim svaki
+# pretinac sortira zasebno (pomoću Insertion Sorta), i na kraju spaja sve 
+# pretince u jednu sortiranu listu.
+#
+# Vremenska složenost:
+# - Najbolji slučaj: O(N + K) gdje je K broj pretinaca
+# - Prosječni slučaj: O(N + K) ako su podaci ravnomjerno raspoređeni
+# - Najgori slučaj: O(N²) ako svi podaci završe u jednom pretincu
+#
+# Prostorna složenost: O(N + K) - dodatni prostor za pretince
+# ==============================================================================
+
 class Node:
     """Čvor jednostruko povezane liste."""
     def __init__(self, data):
@@ -11,7 +27,7 @@ class LinkedList:
         self.head = None
 
     def append(self, data):
-        """Pomoćna metoda za dodavanje elementa na kraj liste."""
+        """Pomoćna metoda za dodavanje elementa na kraj liste (samo za testiranje)."""
         new_node = Node(data)
         if not self.head:
             self.head = new_node
@@ -21,126 +37,182 @@ class LinkedList:
             last = last.next
         last.next = new_node
 
-    def print_list(self):
-        """Ispisuje listu u čitljivom formatu."""
-        current = self.head
-        elements = []
-        while current:
-            elements.append(str(current.data))
+
+# ==============================================================================
+# INSERTION SORT (METODA UNUTAR KLASE)
+# ==============================================================================
+# Opis:
+# Insertion sort za povezanu listu radi na principu da se lista dijeli na 
+# sortirani i nesortirani dio. Svaki element iz nesortiranog dijela se 
+# umeće na odgovarajuće mjesto u sortirani dio.
+#
+# Prepoznavanje:
+# 1. Koristi se pomoćna funkcija 'sorted_insert' za umetanje u sortiranu listu.
+# 2. Radi na principu "gradi sortiranu listu od nule" - uzima čvor po čvor 
+#    iz originalne liste i umeće ih u novu sortiranu listu.
+# 3. Ovo je STANDARDNA implementacija insertion sorta za povezane liste.
+#
+# Vremenska složenost: O(N²) u najgorem slučaju
+# Prostorna složenost: O(1) - sortiranje na mjestu
+# ==============================================================================
+
+    def _sorted_insert(self, head, new_node):
+        """
+        Pomoćna metoda: Umeće čvor u već sortiranu listu (rastući poredak).
+        
+        Argumenti:
+            head - glava sortirane liste
+            new_node - čvor koji treba umetnuti
+        
+        Vraća:
+            Novu glavu liste nakon umetanja
+        """
+        # Ako je lista prazna ili novi čvor dolazi na sam početak
+        if head is None or head.data >= new_node.data:
+            new_node.next = head
+            return new_node
+
+        # Traženje pozicije za umetanje
+        current = head
+        while current.next is not None and current.next.data < new_node.data:
             current = current.next
-        print(" -> ".join(elements) + " -> None")
 
-
-def sorted_insert(head, new_node):
-    """Pomoćna funkcija: Umeće čvor u već sortiranu listu."""
-    # Ako je lista prazna ili novi čvor dolazi na sam početak
-    if head is None or head.data >= new_node.data:
-        new_node.next = head
-        return new_node
-
-    # Traženje pozicije za umetanje
-    current = head
-    while current.next is not None and current.next.data < new_node.data:
-        current = current.next
-
-    new_node.next = current.next
-    current.next = new_node
-    return head
-
-
-def insertion_sort(head):
-    """Sortira povezanu listu pomoću Insertion Sort algoritma."""
-    if head is None or head.next is None:
+        # Umetanje čvora
+        new_node.next = current.next
+        current.next = new_node
         return head
 
-    sorted_head = None
-    current = head
-    
-    while current is not None:
-        next_node = current.next  # Spremi pokazivač na idući čvor
-        sorted_head = sorted_insert(sorted_head, current)
-        current = next_node
-
-    return sorted_head
-
-
-def bucket_sort_linked_list(linked_list, bucket_count=5):
-    """Glavna funkcija za Bucket Sort povezane liste."""
-    head = linked_list.head
-    if head is None or head.next is None:
-        return linked_list
-
-    # 1. Pronađi minimalnu i maksimalnu vrijednost u listi
-    min_val = head.data
-    max_val = head.data
-    current = head
-    while current:
-        if current.data < min_val:
-            min_val = current.data
-        if current.data > max_val:
-            max_val = current.data
-        current = current.next
-
-    # Ako su svi elementi u listi isti, ona je već sortirana
-    if min_val == max_val:
-        return linked_list
-
-    # 2. Inicijaliziraj listu pretinaca (svaki pretinac drži referencu na glavu svoje podliste)
-    buckets = [None] * bucket_count
-
-    # 3. Scatter (Razvrstavanje): Raspodijeli čvorove u pretince
-    current = head
-    while current:
-        next_node = current.next  # Spremi idući čvor prije promjene pokazivača
+    def insertion_sort(self):
+        """
+        Sortira listu pomoću Insertion Sort algoritma (rastući poredak).
         
-        # Izračunaj indeks pretinca na temelju raspona vrijednosti
-        bucket_idx = int((current.data - min_val) * (bucket_count - 1) / (max_val - min_val))
+        Vraća:
+            None - sortira listu na mjestu (in-place)
+        """
+        head = self.head
+        if head is None or head.next is None:
+            return
+
+        sorted_head = None
+        current = head
         
-        # Umetni čvor na početak odgovarajućeg pretinca (efikasno O(1) umetanje)
-        current.next = buckets[bucket_idx]
-        buckets[bucket_idx] = current
+        while current is not None:
+            next_node = current.next  # Spremi pokazivač na idući čvor
+            sorted_head = self._sorted_insert(sorted_head, current)
+            current = next_node
+
+        self.head = sorted_head
+
+
+# ==============================================================================
+# BUCKET SORT (METODA UNUTAR KLASE)
+# ==============================================================================
+# Opis:
+# Bucket sort za povezanu listu prolazi kroz 3 faze:
+# 1. Scatter (razbacivanje) - raspoređuje čvorove u pretince po vrijednosti
+# 2. Sortiranje pretinaca - svaki pretinac se sortira insertion sortom
+# 3. Gather (skupljanje) - spaja sve pretince u jednu sortiranu listu
+#
+# Prepoznavanje:
+# 1. Prvo se pronalaze min i max vrijednost (za normalizaciju)
+# 2. Svaki čvor se dodjeljuje pretincu prema formuli:
+#    idx = (vrijednost - min) * (broj_pretinaca - 1) / (max - min)
+# 3. Svaki pretinac je zasebna povezana lista (head pokazivač)
+# 4. Čvorovi se umetnu na POČETAK pretinca (O(1) operacija)
+# 5. Nakon sortiranja pretinaca, spajaju se u jednu listu
+# ==============================================================================
+
+    def bucket_sort(self, bucket_count=5):
+        """
+        Sortira listu koristeći Bucket Sort algoritam (rastući poredak).
         
-        current = next_node
+        Argumenti:
+            bucket_count - broj pretinaca (zadano 5)
+        
+        Vraća:
+            None - sortira listu na mjestu (in-place)
+        """
+        head = self.head
+        if head is None or head.next is None:
+            return
 
-    # 4. Gather (Skupljanje): Sortiraj pretince i spoji ih natrag u jednu listu
-    sorted_head = None
-    sorted_tail = None
+        # 1. Pronađi minimalnu i maksimalnu vrijednost u listi
+        min_val = head.data
+        max_val = head.data
+        current = head
+        while current:
+            if current.data < min_val:
+                min_val = current.data
+            if current.data > max_val:
+                max_val = current.data
+            current = current.next
 
-    for i in range(bucket_count):
-        if buckets[i] is not None:
-            # Sortiraj trenutni pretinac pomoću Insertion Sorta
-            buckets[i] = insertion_sort(buckets[i])
+        # Ako su svi elementi u listi isti, ona je već sortirana
+        if min_val == max_val:
+            return
 
-            # Ako je ovo prvi pretinac koji spajamo, postavi njegovu glavu kao glavnu glavu
-            if sorted_head is None:
-                sorted_head = buckets[i]
-            else:
-                # Inače, nadoveži ga na kraj prethodno spojenih pretinaca
-                sorted_tail.next = buckets[i]
+        # 2. Inicijaliziraj listu pretinaca (svaki pretinac drži referencu na glavu svoje podliste)
+        buckets = [None] * bucket_count
 
-            # Pomakni 'tail' pokazivač na kraj novonastale sortirane liste brojeva
-            sorted_tail = buckets[i]
-            while sorted_tail.next is not None:
-                sorted_tail = sorted_tail.next
+        # 3. Scatter (Razvrstavanje): Raspodijeli čvorove u pretince
+        current = head
+        while current:
+            next_node = current.next  # Spremi idući čvor prije promjene pokazivača
+            
+            # Izračunaj indeks pretinca na temelju raspona vrijednosti
+            bucket_idx = int((current.data - min_val) * (bucket_count - 1) / (max_val - min_val))
+            
+            # Umetni čvor na početak odgovarajućeg pretinca (efikasno O(1) umetanje)
+            current.next = buckets[bucket_idx]
+            buckets[bucket_idx] = current
+            
+            current = next_node
 
-    # Ažuriraj glavu originalnog objekta liste brojeva
-    linked_list.head = sorted_head
-    return linked_list
+        # 4. Gather (Skupljanje): Sortiraj pretince i spoji ih natrag u jednu listu
+        sorted_head = None
+        sorted_tail = None
 
+        for i in range(bucket_count):
+            if buckets[i] is not None:
+                # Sortiraj trenutni pretinac pomoću Insertion Sorta
+                # (koristimo isti insertion_sort ali na head-u pretinca)
+                buckets[i] = self._insertion_sort_on_head(buckets[i])
 
-# --- Testiranje algoritma ---
-if __name__ == "__main__":
-    ll = LinkedList()
-    
-    # Dodaj elemente u listu
-    for val in:
-        ll.append(val)
+                # Ako je ovo prvi pretinac koji spajamo, postavi njegovu glavu kao glavnu glavu
+                if sorted_head is None:
+                    sorted_head = buckets[i]
+                else:
+                    # Inače, nadoveži ga na kraj prethodno spojenih pretinaca
+                    sorted_tail.next = buckets[i]
 
-    print("Originalna lista:")
-    ll.print_list()
+                # Pomakni 'tail' pokazivač na kraj novonastale sortirane liste
+                sorted_tail = buckets[i]
+                while sorted_tail.next is not None:
+                    sorted_tail = sorted_tail.next
 
-    # Pokretanje Bucket Sorta s 5 pretinaca
-    bucket_sort_linked_list(ll, bucket_count=5)
+        # Ažuriraj glavu originalnog objekta liste
+        self.head = sorted_head
 
-    print("\nSortirana lista:")
-    ll.print_list()
+    def _insertion_sort_on_head(self, head):
+        """
+        Pomoćna metoda: Sortira povezanu listu na temelju glave (head) pomoću Insertion Sorta.
+        Koristi se za sortiranje pojedinačnih pretinaca u Bucket Sortu.
+        
+        Argumenti:
+            head - glava liste koju treba sortirati
+        
+        Vraća:
+            Novu glavu sortirane liste
+        """
+        if head is None or head.next is None:
+            return head
+
+        sorted_head = None
+        current = head
+        
+        while current is not None:
+            next_node = current.next
+            sorted_head = self._sorted_insert(sorted_head, current)
+            current = next_node
+
+        return sorted_head
