@@ -1,5 +1,21 @@
 # ==============================================================================
-# BUCKET SORT - JEDNOSTRUKO POVEZANA LISTA
+# VERZIJA 1: JEDNOSTRUKO POVEZANA LISTA + ZAMJENA PODATAKA (DATA SWAP)
+# ==============================================================================
+# Opis:
+# Ova metoda sortira jednostruko povezanu listu silaznim redoslijedom (od najvećeg 
+# prema najmanjem) koristeći bubble sort algoritam. Sortiranje se postiže isključivo 
+# zamjenom podataka (.data) između čvorova, dok pokazivači (.next) ostaju nepromijenjeni.
+# Čvorovi fizički ostaju na istim mjestima u memoriji, samo im se mijenjaju vrijednosti.
+#
+# Prepoznavanje:
+# 1. Koristi se samo 'current.next' (lista ide samo prema naprijed, nema '.prev').
+# 2. Zamjena se vrši isključivo nad '.data' atributima: 
+#    'current.data, next_node.data = next_node.data, current.data'
+# 3. Pokazivači '.next' se NE MIJENJAJU.
+# 4. Metoda radi na principu dvije ugnježđene while petlje (bubble sort).
+#
+# Vremenska složenost: O(N²) u najgorem slučaju
+# Prostorna složenost: O(1) - sortiranje na mjestu
 # ==============================================================================
 
 class Node:
@@ -7,146 +23,115 @@ class Node:
         self.data = data
         self.next = None
 
-
-class LinkedList:
+class SingleLinkedList:
     def __init__(self):
         self.head = None
-
-
-# ==============================================================================
-# POMOĆNA FUNKCIJA 1: INSERTION SORT
-# ==============================================================================
-
-def insertion_sort(head):
-    """Sortira povezanu listu Insertion Sortom (rastući poredak)."""
-    if head is None or head.next is None:
-        return head
     
-    sorted_head = None
-    current = head
-    
-    while current is not None:
-        next_node = current.next
+    def bubble_sort_data_swap(self):
+        """Sortira listu silazno koristeći zamjenu podataka (data swap)."""
+        if self.head is None or self.head.next is None:
+            return
         
-        # Umetanje na početak
-        if sorted_head is None or sorted_head.data >= current.data:
-            current.next = sorted_head
-            sorted_head = current
-        else:
-            # Traženje pozicije
-            temp = sorted_head
-            while temp.next is not None and temp.next.data < current.data:
-                temp = temp.next
-            current.next = temp.next
-            temp.next = current
-        
-        current = next_node
-    
-    return sorted_head
-
-
-# ==============================================================================
-# POMOĆNA FUNKCIJA 2: PRONALAŽENJE MIN I MAX
-# ==============================================================================
-
-def find_min_max(head):
-    """Pronalazi minimalnu i maksimalnu vrijednost u listi."""
-    if head is None:
-        return None, None
-    
-    min_val = head.data
-    max_val = head.data
-    current = head
-    
-    while current is not None:
-        if current.data < min_val:
-            min_val = current.data
-        if current.data > max_val:
-            max_val = current.data
-        current = current.next
-    
-    return min_val, max_val
-
-
-# ==============================================================================
-# POMOĆNA FUNKCIJA 3: SPOJANJE PRETINACA
-# ==============================================================================
-
-def concatenate_buckets(buckets, bucket_count):
-    """Spaja sve pretince u jednu listu."""
-    sorted_head = None
-    sorted_tail = None
-    
-    for i in range(bucket_count):
-        if buckets[i] is not None:
-            if sorted_head is None:
-                sorted_head = buckets[i]
-            else:
-                sorted_tail.next = buckets[i]
+        swapped = True
+        while swapped:
+            swapped = False
+            current = self.head
             
-            sorted_tail = buckets[i]
-            while sorted_tail.next is not None:
-                sorted_tail = sorted_tail.next
-    
-    return sorted_head
+            while current.next is not None:
+                next_node = current.next
+                # Silazni poredak: ako je trenutni manji od idućeg, mijenjaj podatke
+                if current.data < next_node.data:
+                    current.data, next_node.data = next_node.data, current.data
+                    swapped = True
+                current = current.next
 
 
 # ==============================================================================
-# GLAVNA FUNKCIJA: BUCKET SORT
+# VERZIJA 2: JEDNOSTRUKO POVEZANA LISTA + ZAMJENA POKAZIVAČA (POINTER SWAP)
+# ==============================================================================
+# Opis:
+# Ova metoda također sortira jednostruko povezanu listu silaznim redoslijedom, 
+# ali za razliku od prve verzije, ovdje se ne mijenjaju podaci unutar čvorova 
+# već se fizički mijenjaju pokazivači (.next) kako bi čvorovi zamijenili mjesta 
+# u memoriji. Ova metoda zahtijeva praćenje prethodnog čvora ('prev') kako bi 
+# se ispravno ažurirale veze prilikom zamjene.
+#
+# Prepoznavanje:
+# 1. Vrijednosti '.data' se nigdje ne prepisuju (zaključane su).
+# 2. Moramo imati 'prev' varijablu (to je obična lokalna varijabla u petlji, 
+#    NIJE atribut čvora!). Ona nam treba jer kad zamijenimo dva čvora, čvor ispred 
+#    njih mora pokazivati na novi početak tog para.
+# 3. Fizički se mijenjaju '.next' pokazivači kako bi čvorovi zamijenili mjesta 
+#    u memoriji.
+# 4. Posebna pažnja se vodi na ažuriranje 'self.head' kada se mijenjaju prva 
+#    dva čvora u listi.
+#
+# Vremenska složenost: O(N²) u najgorem slučaju
+# Prostorna složenost: O(1) - sortiranje na mjestu
 # ==============================================================================
 
-def bucket_sort(head, bucket_count):
-    """
-    Sortira povezanu listu Bucket Sort algoritmom (rastući poredak).
-    
-    Argumenti:
-        head - glava liste
-        bucket_count - broj pretinaca
-    
-    Vraća:
-        Glavu sortirane liste
-    """
-    if head is None or head.next is None:
-        return head
-    
-    # 1. Pronađi min i max
-    min_val, max_val = find_min_max(head)
-    
-    # Ako su svi elementi isti
-    if min_val == max_val:
-        return head
-    
-    # 2. Kreiraj pretince
-    buckets = [None] * bucket_count
-    
-    # 3. Raspodijeli čvorove u pretince
-    current = head
-    while current is not None:
-        next_node = current.next
+    def bubble_sort_pointer_swap(self):
+        """Sortira listu silazno koristeći zamjenu pokazivača (pointer swap)."""
+        if self.head is None or self.head.next is None:
+            return
         
-        # Izračunaj indeks pretinca
-        bucket_idx = int((current.data - min_val) * (bucket_count - 1) / (max_val - min_val))
-        
-        # Umetni na početak pretinca
-        current.next = buckets[bucket_idx]
-        buckets[bucket_idx] = current
-        
-        current = next_node
-    
-    # 4. Sortiraj svaki pretinac
-    for i in range(bucket_count):
-        if buckets[i] is not None:
-            buckets[i] = insertion_sort(buckets[i])
-    
-    # 5. Spoji sve pretince
-    return concatenate_buckets(buckets, bucket_count)
+        swapped = True
+        while swapped:
+            swapped = False
+            current = self.head
+            prev = None  # Prati čvor koji se nalazi ispred 'current'
+            
+            while current.next is not None:
+                next_node = current.next
+                
+                # Silazni poredak
+                if current.data < next_node.data:
+                    swapped = True
+                    
+                    # PRESPOJAVANJE POKAZIVAČA:
+                    current.next = next_node.next
+                    next_node.next = current
+                    
+                    # Ako smo mijenjali prva dva čvora u listi, moramo ažurirati 'self.head'
+                    if prev is None:
+                        self.head = next_node
+                    else:
+                        prev.next = next_node
+                    
+                    # Nakon zamjene, čvorovi su zamijenili mjesta u memoriji.
+                    # 'next_node' je sada ispred 'current', pa 'prev' postaje 'next_node'.
+                    prev = next_node
+                    # current ostaje isti (sada je iza next_node)
+                else:
+                    # Ako nije bilo zamjene, samo pomičemo oba pokazivača naprijed
+                    prev = current
+                    current = current.next
 
 
 # ==============================================================================
-# METODA UNUTAR KLASE
+# TABLICA ZA USPOREDBU DVIJU VERZIJA
+# ==============================================================================
+# | Karakteristika          | Data Swap (Verzija 1) | Pointer Swap (Verzija 2) |
+# |-------------------------|-----------------------|--------------------------|
+# | Mijenja .data?         | DA                    | NE                       |
+# | Mijenja .next?         | NE                    | DA                       |
+# | Težina implementacije  | Jednostavna           | Kompleksna               |
+# | Potreban 'prev'?       | NE                    | DA                       |
+# | Ažuriranje self.head?  | NE                    | DA (kod zamjene prva 2)  |
+# | Brzina (mali podaci)   | Ista (O(N²))          | Ista (O(N²))             |
+# | Brzina (veliki podaci) | Sporije (kopiranje)   | Brže (samo pokazivači)   |
+# | Pogodnost za tipove    | int, float, bool      | string, list, dict       |
+# | Čitljivost koda        | Visoka                | Srednja                  |
+# | Vjerojatnost greške    | Mala                  | Veća (zbog pokazivača)   |
 # ==============================================================================
 
-class LinkedList:
-    def bucket_sort(self, bucket_count):
-        """Sortira listu Bucket Sort algoritmom (rastući poredak)."""
-        self.head = bucket_sort(self.head, bucket_count)
+# ==============================================================================
+# NAPOMENA:
+# Obje verzije imaju ISTU vremensku složenost O(N²) u najgorem slučaju, ali se
+# razlikuju u performansama kada su podaci unutar čvorova veliki (npr. dugi 
+# stringovi, velike liste, rječnici). Pointer swap je tada efikasniji jer ne 
+# kopira podatke već samo premješta pokazivače.
+# 
+# U najboljem slučaju (već sortirana lista), obje verzije imaju složenost O(N)
+# jer se zaustavljaju nakon jednog prolaza kada 'swapped' ostane False.
+# ==============================================================================
