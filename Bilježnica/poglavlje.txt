@@ -1,0 +1,17 @@
+IMPLEMENTACIJE
+SLL — Singly Linked List (jednostruko povezana lista)
+DLL — Doubly Linked List (dvostruko povezana lista)
+
+BST — Binary Search Tree (stablo za pretraživanje; TreeNode key)
+BST — Binary Search Tree (stablo za pretraživanje; TreeNode key/value)
+
+CustomDict — Simple Dict with parallel keys/values lists (paralelni nizovi)
+HT / HashTable — Hash table with chaining (djb2 hash function)
+
+Stack — Stack (LIFO, stog)
+Queue (SIMPLE) — Simple Queue using list.insert(0) / pop() (FIFO, jednostavna implementacija)
+Circular Queue (array) — Circular Fixed‑size Queue (niz + front + size; ring buffer)
+
+CDLL — Circular Doubly-Linked List (cirkularna dvostruko povezana lista)
+
+SORT
