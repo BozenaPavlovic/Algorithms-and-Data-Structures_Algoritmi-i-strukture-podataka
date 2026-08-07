@@ -1,3 +1,4 @@
+#%%
 class TreeNodeDict:
     def __init__(self, key, value):
         self.key = key
@@ -10,28 +11,28 @@ class BSTDict:
         self.root = None
 
     def insert(self, key, value):
-        """Ako ključ postoji -> update value; inače umetni novi čvor."""
+        new_node = TreeNodeDict(key, value)
         if self.root is None:
-            self.root = TreeNodeDict(key, value)
+            self.root = new_node
             return
         current = self.root
         while True:
             if key < current.key:
                 if current.left is None:
-                    current.left = TreeNodeDict(key, value)
-                    return
+                    current.left = new_node
+                    break
                 current = current.left
             elif key > current.key:
                 if current.right is None:
-                    current.right = TreeNodeDict(key, value)
-                    return
+                    current.right = new_node
+                    break
                 current = current.right
-            else:  # key == current.key -> update vrijednost
+            else:
+                # key exists -> update value
                 current.value = value
-                return
+                break
 
     def search(self, key):
-        """Vrati node ako postoji, inače None."""
         current = self.root
         while current is not None:
             if key == current.key:
@@ -43,11 +44,10 @@ class BSTDict:
         return None
 
     def delete(self, key):
-        """Obriši čvor s danim ključem; ako ne postoji, ne radi ništa."""
         parent = None
         current = self.root
 
-        # Pronađi čvor i parenta
+        # Find the node to be deleted and its parent
         while current is not None and current.key != key:
             parent = current
             if key < current.key:
@@ -56,50 +56,49 @@ class BSTDict:
                 current = current.right
 
         if current is None:
-            return  # ključ nije pronađen
+            return  # Node with key not found
 
-        # Case 1: list
+        # Case 1: Node to be deleted has no children (leaf)
         if current.left is None and current.right is None:
-            if parent is None:
-                self.root = None
-            else:
+            if current != self.root:
                 if parent.left == current:
                     parent.left = None
                 else:
                     parent.right = None
+            else:
+                self.root = None
             return
 
-        # Case 2: dva djeteta
+        # Case 2: Node to be deleted has two children
         if current.left is not None and current.right is not None:
             successor = self._min_value_node(current.right)
             succ_key, succ_value = successor.key, successor.value
-            # obriši successor (on će biti leaf ili imati najviše jedno dijete)
+            # delete successor (will remove that node)
             self.delete(successor.key)
-            # kopiraj key i value successor-a u current
+            # copy successor's key and value into current
             current.key = succ_key
             current.value = succ_value
             return
 
-        # Case 3: jedno dijete
-        child = current.left if current.left is not None else current.right
-        if parent is None:
-            self.root = child
-        else:
-            if parent.left == current:
+        # Case 3: Node to be deleted has one child
+        child = current.left if current.left else current.right
+        if current != self.root:
+            if current == parent.left:
                 parent.left = child
             else:
                 parent.right = child
+        else:
+            self.root = child
         return
 
-    def _min_value_node(self, node):
-        """Pomoćna: vrati najmanji (lijevi-most) node u podstablu."""
+    def _min_value_node(self, node):  # Returns left-most node
         current = node
         while current.left is not None:
             current = current.left
         return current
 
     def in_order_traversal(self, node=None, result=None):
-        """Rekurzivno in-order: vraća listu (key, value) tupleova sortiranu po ključu."""
+        """Rekurzivno: vrati listu (key, value) tupleova u rastućem redoslijedu ključeva."""
         if result is None:
             result = []
         if node is None:
