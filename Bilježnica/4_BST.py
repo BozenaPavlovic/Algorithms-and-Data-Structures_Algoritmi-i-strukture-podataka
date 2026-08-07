@@ -97,17 +97,3 @@ class BSTDict:
             current = current.left
         return current
 
-    def in_order_traversal(self, node=None, result=None):
-        """Rekurzivno: vrati listu (key, value) tupleova u rastućem redoslijedu ključeva."""
-        if result is None:
-            result = []
-        if node is None:
-            node = self.root
-        def _in(n):
-            if n is None:
-                return
-            _in(n.left)
-            result.append((n.key, n.value))
-            _in(n.right)
-        _in(node)
-        return result
