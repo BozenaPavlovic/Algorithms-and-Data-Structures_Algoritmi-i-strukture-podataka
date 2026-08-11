@@ -56,3 +56,16 @@ def print_unordered_pairs_3(arr1,arr2):
                     print(str(i) + ", " + str(j))
 
     # O(N^2)
+
+
+
+
+
+Uobičajeni složenosti i tipični primjeri
+O(1) — konstanta: pristup elementu po indeksu, aritmetička operacija.
+O(log n) — logaritamsko: binarno pretraživanje.
+O(n) — linearno: jedan prolaz kroz niz.
+O(n log n) — n puta log n: sortiranje uspoređivanjem (merge, quick average).
+O(n^2) — kvadratno: dvije ugniježdene petlje (bubble sort worst).
+O(n^3) — kubno: tri potpuno ugniježdene petlje.
+O(2^n), O(n!) — eksponencijalno/faktorialno: brute‑force kombinatorni problemi.
