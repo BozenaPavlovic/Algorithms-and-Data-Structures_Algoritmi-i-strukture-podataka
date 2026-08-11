@@ -69,3 +69,10 @@ O(n log n) — n puta log n: sortiranje uspoređivanjem (merge, quick average).
 O(n^2) — kvadratno: dvije ugniježdene petlje (bubble sort worst).
 O(n^3) — kubno: tri potpuno ugniježdene petlje.
 O(2^n), O(n!) — eksponencijalno/faktorialno: brute‑force kombinatorni problemi.
+
+
+
+
+
+
+
