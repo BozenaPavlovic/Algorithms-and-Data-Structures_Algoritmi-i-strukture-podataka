@@ -46,6 +46,10 @@ def print_unordered_pairs_2(arr1,arr2): # Dva različita ulaza!
                 print(str(i) + ", " + str(j))
 
     # O(N*M)
+Vrijeme: O(N·M), gdje je N = len(arr1), M = len(arr2).
+Obrazloženje: vanjska petlja radi N puta, za svaki element izvodi se unutarnja petlja M puta → ukupno ≈ N×M operacija.
+Posebno: ako M = N → O(N^2).
+
 
 #%%
 def print_unordered_pairs_3(arr1,arr2):
@@ -56,7 +60,9 @@ def print_unordered_pairs_3(arr1,arr2):
                     print(str(i) + ", " + str(j))
 
     # O(N^2)
-
+Vrijeme: O(N^2), gdje je N = len(arr1).
+Obrazloženje: dvije ugniježdene petlje preko arr1 daju ≈ N×N iteracija; unutarnja for k in range(10000) je konstanta (10000) → konstanta se zanemaruje u Big‑O.
+Posebno: ako bi konstanta išla ovisno o N, utjecala bi na složenost; ovako ne utječe.
 
 
 
