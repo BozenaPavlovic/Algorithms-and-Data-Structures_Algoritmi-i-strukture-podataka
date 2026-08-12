@@ -1,0 +1,214 @@
+CONTAINS:
+BUBBLE - ARR - SINGLE - DOUBLE
+MERGE - ARR - SINGLE - DOUBLE
+SELECTION - ARR - SINGLE - DOUBLE 
+
+#BUBBLE SORT
+# Normalno (niz / array)
+
+def bubble_sort(arr):
+    n = len(arr)
+    swapped = True
+    while swapped:
+        swapped = False
+        for i in range(1, n):
+            if arr[i-1] > arr[i]:
+                arr[i-1], arr[i] = arr[i], arr[i-1] # zamjena elemenata
+                swapped = True
+        if not swapped:
+            break
+    return arr
+  
+# BUBBLE SINGLE
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class SingleLinkedList:
+    def __init__(self):
+        self.head = None
+    
+    def bubble_sort_data_swap(self):
+        """Sortira listu silazno koristeći zamjenu podataka (data swap)."""
+        if self.head is None or self.head.next is None:
+            return
+        
+        swapped = True
+        while swapped:
+            swapped = False
+            current = self.head
+            
+            while current.next is not None:
+                next_node = current.next
+                # Silazni poredak: ako je trenutni manji od idućeg, mijenjaj podatke
+                if current.data < next_node.data:
+                    current.data, next_node.data = next_node.data, current.data
+                    swapped = True
+                current = current.next
+
+#BUBBLE DOUBLE
+class DoublyNode:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+    
+    def bubble_sort_data_swap(self):
+        """Sortira dvostruko povezanu listu silazno koristeći zamjenu podataka (data swap)."""
+        if self.head is None or self.head.next is None:
+            return
+        
+        swapped = True
+        while swapped:
+            swapped = False
+            current = self.head
+            
+            while current.next is not None:
+                next_node = current.next
+                # Silazni poredak: ako je trenutni manji od idućeg, mijenjaj podatke
+                if current.data < next_node.data:
+                    current.data, next_node.data = next_node.data, current.data
+                    swapped = True
+                current = current.next
+
+
+#MERGE SORT 
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+
+    middle = len(arr) // 2
+    left = merge_sort(arr[:middle])
+    right = merge_sort(arr[middle:])
+
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    while len(left) > 0 and len(right) > 0:
+        if left[0] <= right[0]:
+            result += [left[0]]
+            left = left[1:]
+        else:
+            result += [right[0]]
+            right = right[1:]
+
+    result += left
+    result += right
+
+    return result
+  
+# MERGE JEDNO
+  class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def split_list_single_pointers(head):
+    slow = head
+    fast = head.next
+    
+    while fast is not None and fast.next is not None:
+        slow = slow.next
+        fast = fast.next.next
+        
+    mid = slow.next
+    slow.next = None  # Fizički rez veze između polovica
+    return mid
+
+def merge_single_pointers(left, right):
+    if left is None: return right
+    if right is None: return left
+    
+    if left.data <= right.data:
+        result = left
+        result.next = merge_single_pointers(left.next, right)
+    else:
+        result = right
+        result.next = merge_single_pointers(left, right.next)
+    return result
+
+def merge_sort_single_pointers(head):
+    # Bazni slučaj
+    if head is None or head.next is None:
+        return head
+        
+    # 1. Split cjelina
+    mid = split_list_single_pointers(head)
+    
+    # 2. Rekurzivni pozivi
+    left_sorted = merge_sort_single_pointers(head)
+
+
+# MERGE DOUBLE
+class DoublyNode:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+def split_list_double_pointers(head):
+    slow = head
+    fast = head.next
+    
+    while fast is not None and fast.next is not None:
+        slow = slow.next
+        fast = fast.next.next
+        
+    mid = slow.next
+    slow.next = None  # Prekid prednje veze
+    if mid is not None:
+        mid.prev = None  # 🟢 DODATAK ZA DVOSTRUKU: Prekid stražnje veze
+    return mid
+
+def merge_double_pointers(left, right):
+    """Spaja dvije sortirane dvostruke liste i obnavlja .prev veze."""
+    if left is None: return right
+    if right is None: return left
+    
+    if left.data <= right.data:
+        result = left
+        result.next = merge_double_pointers(left.next, right)
+        if result.next is not None:
+            result.next.prev = result  # 🟢 DODATAK ZA DVOSTRUKU (veza unazad)
+        result.prev = None
+    else:
+        result = right
+        result.next = merge_double_pointers(left, right.next)
+        if result.next is not None:
+            result.next.prev = result  # 🟢 DODATAK ZA DVOSTRUKU (veza unazad)
+        result.prev = None
+    return result
+
+def merge_sort_double_pointers(head):
+    if head is None or head.next is None:
+        return head
+        
+    mid = split_list_double_pointers(head)
+    
+    left_sorted = merge_sort_double_pointers(head)
+    right_sorted = merge_sort_double_pointers(mid)
+    
+    return merge_double_pointers(left_sorted, right_sorted)
+
+
+# SELECTION SORT (NIZ / ARRAY – standardna verzija)
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+
+  
+    right_sorted = merge_sort_single_pointers(mid)
+    
+    # 3. Merge cjelina
+    return merge_single_pointers(left_sorted, right_sorted)
