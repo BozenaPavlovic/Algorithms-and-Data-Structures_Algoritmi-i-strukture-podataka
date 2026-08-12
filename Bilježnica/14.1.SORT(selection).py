@@ -1,3 +1,14 @@
+
+Array — selection_sort(arr)
+
+Singly-linked — pointer version: selection_sort_single_pointers(head) (remove-min → append to tail)
+Singly-linked — data-swap: selection_sort_single_data(head) (swap start.data with min.data)
+Singly-linked — class method: SLL_class.selection_sort (remove-max → add_first using find_max + delete_at_position)
+
+Doubly-linked — DLL_class.selection_sort (remove-max → add_first; updates prev/next)
+
+
+
 # SELECTION SORT (NIZ / ARRAY – standardna verzija)
 def selection_sort(arr):
     n = len(arr)
