@@ -1,3 +1,10 @@
+Merge - Array (top-down)
+
+Singly-linked: pointer-merge (split + merge)
+
+Doubly-linked: pointer-merge (update prev links)
+
+
 #MERGE SORT 
 def merge_sort(arr):
     if len(arr) <= 1:
