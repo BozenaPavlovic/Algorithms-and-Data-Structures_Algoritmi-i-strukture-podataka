@@ -212,3 +212,141 @@ def selection_sort(arr):
     
     # 3. Merge cjelina
     return merge_single_pointers(left_sorted, right_sorted)
+
+
+# SELECTION SINGLE
+class Node:
+    def __init__(self, data):
+        self.data = data # Podatke spremamo u čvor
+        self.next = None # Inicijaliziramo pokazivač na null (None)
+
+class SLL_class:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.size = 0
+
+    def add_first(self, new_data):
+        new_node = Node(new_data)   # Kreiramo novi čvor s novim podatkom
+        if self.head is None:       # Poseban slučaj ako je lista prazna!
+            self.head = new_node
+            self.tail = new_node
+        else:
+            new_node.next = self.head   # Novi čvor pokazuje na trenutni prvi član liste
+            self.head = new_node        # Prvi član liste postaje novi čvor
+        self.size += 1
+    
+    def delete_at_position(self, position):
+        if position < 0 or position >= self.size:
+            print("Invalid position.")
+            return
+        if position == 0:
+            self.delete_first()
+        elif position == self.size - 1:
+            self.delete_last()
+        else:
+            current = self.head
+            for _ in range(position - 1):
+                current = current.next       # Pronalazimo prethodni čvor (u odnosu na traženi)
+            current.next = current.next.next # Ažuriramo gdje pokazuje (preskačemo traženi čvor)
+            self.size -= 1
+
+    def find_max(self):
+        if self.head is None:
+            print("List is empty.")
+            return None, None
+        mx_idx = 0
+        mx = self.head.data
+        current = self.head
+        idx = 0
+        while current:
+            if current.data > mx:
+                mx = current.data
+                mx_idx = idx
+            current = current.next
+            idx += 1
+        return mx_idx, mx
+    
+        
+    def selection_sort(self):
+        sorted_list = SLL_class()
+        while self.size > 0:
+            mx_idx, mx = self.find_max()
+            sorted_list.add_first(mx)
+            self.delete_at_position(mx_idx)
+        self.head = sorted_list.head
+        self.tail = sorted_list.tail
+        self.size = sorted_list.size
+
+# SELECTION DOUBLE
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+
+class DLL_class:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.size = 0
+
+    def add_first(self, new_data):
+        new_node = Node(new_data)
+        if self.head is None:
+            # prazna lista
+            self.head = new_node
+            self.tail = new_node
+            new_node.next = new_node.prev = None
+        else:
+            new_node.next = self.head
+            new_node.prev = None
+            self.head.prev = new_node
+            self.head = new_node
+        self.size += 1
+    def delete_at_position(self, position):
+        if position < 0 or position >= self.size:
+            print("Invalid position.")
+            return
+        if position == 0:
+            self.delete_first()
+            return
+        if position == self.size - 1:
+            self.delete_last()
+            return
+        node = self._node_at(position)
+        prev_node = node.prev
+        next_node = node.next
+        prev_node.next = next_node
+        next_node.prev = prev_node
+        self.size -= 1
+
+
+    def find_max(self):
+        if self.head is None:
+            print("List is empty.")
+            return None, None
+        mx_idx = 0
+        mx = self.head.data
+        current = self.head
+        idx = 0
+        while current:
+            if current.data > mx:
+                mx = current.data
+                mx_idx = idx
+            current = current.next
+            idx += 1
+        return mx_idx, mx
+
+    def selection_sort(self):
+        sorted_list = DLL_class()
+        while self.size > 0:
+            mx_idx, mx = self.find_max()
+            # dodamo na početak sortirane liste
+            sorted_list.add_first(mx)
+            self.delete_at_position(mx_idx)
+        # premjestimo pokazivače iz sorted_list u self
+        self.head = sorted_list.head
+        self.tail = sorted_list.tail
+        self.size = sorted_list.size
