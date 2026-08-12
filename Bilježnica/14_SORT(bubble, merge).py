@@ -9,10 +9,6 @@ Array
 Singly-linked: data-swap
 Doubly-linked: data-swap
 
-Merge
-Array (top-down)
-Singly-linked: pointer-merge (split + merge)
-Doubly-linked: pointer-merge (update prev links)
 
 
 #BUBBLE SORT
