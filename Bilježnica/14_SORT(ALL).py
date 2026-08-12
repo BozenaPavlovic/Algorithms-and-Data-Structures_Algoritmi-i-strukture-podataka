@@ -104,27 +104,21 @@ def merge(left, right):
     return result
   
 # MERGE JEDNO
-  class Node:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
-
 def split_list_single_pointers(head):
+    if head is None or head.next is None:
+        return None
     slow = head
     fast = head.next
-    
     while fast is not None and fast.next is not None:
         slow = slow.next
         fast = fast.next.next
-        
     mid = slow.next
-    slow.next = None  # Fizički rez veze između polovica
+    slow.next = None
     return mid
 
 def merge_single_pointers(left, right):
     if left is None: return right
     if right is None: return left
-    
     if left.data <= right.data:
         result = left
         result.next = merge_single_pointers(left.next, right)
@@ -134,24 +128,15 @@ def merge_single_pointers(left, right):
     return result
 
 def merge_sort_single_pointers(head):
-    # Bazni slučaj
     if head is None or head.next is None:
         return head
-        
-    # 1. Split cjelina
     mid = split_list_single_pointers(head)
-    
-    # 2. Rekurzivni pozivi
     left_sorted = merge_sort_single_pointers(head)
-
+    right_sorted = merge_sort_single_pointers(mid)
+    return merge_single_pointers(left_sorted, right_sorted)
+    
 
 # MERGE DOUBLE
-class DoublyNode:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
-        self.prev = None
-
 def split_list_double_pointers(head):
     slow = head
     fast = head.next
