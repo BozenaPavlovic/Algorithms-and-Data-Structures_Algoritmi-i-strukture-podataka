@@ -194,7 +194,43 @@ class DLL_class:
         prev_node.next = next_node
         next_node.prev = prev_node
         self.size -= 1
+def _node_at(self, position):
+    if position < 0 or position >= self.size:
+        return None
+    if position <= self.size // 2:
+        cur = self.head
+        for _ in range(position):
+            cur = cur.next
+        return cur
+    else:
+        cur = self.tail
+        for _ in range(self.size - 1, position, -1):
+            cur = cur.prev
+        return cur
 
+def delete_first(self):
+    if self.head is None:
+        return
+    if self.head.next is None:
+        self.head = None
+        self.tail = None
+        self.size = 0
+        return
+    self.head = self.head.next
+    self.head.prev = None
+    self.size -= 1
+
+def delete_last(self):
+    if self.tail is None:
+        return
+    if self.tail.prev is None:
+        self.head = None
+        self.tail = None
+        self.size = 0
+        return
+    self.tail = self.tail.prev
+    self.tail.next = None
+    self.size -= 1
 
     def find_max(self):
         if self.head is None:
