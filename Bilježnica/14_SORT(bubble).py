@@ -12,8 +12,13 @@ Bubble
 Array
 Singly-linked: data-swap
 Doubly-linked: data-swap
+Singly-linked: pointer-swap
+Doubly-linked: pointer-swap
 
-
+# VAŽNO: Verzije 3 i 4 (dvostruko povezane liste) imaju smisla samo ako nam 
+# trebaju .prev pokazivači za druge operacije (npr. brisanje, umetanje s lijeva).
+# Ako nam .prev ne treba, jednostruka lista (Verzija 1 ili 2, data sawp) je bolji izbor 
+# jer troši manje memorije i jednostavnija je za održavanje.
 
 #BUBBLE SORT
 # Normalno (niz / array)
@@ -31,7 +36,7 @@ def bubble_sort(arr):
             break
     return arr
   
-# BUBBLE SINGLE
+# BUBBLE SINGLE data-swap
 class Node:
     def __init__(self, data):
         self.data = data
@@ -59,7 +64,7 @@ class SingleLinkedList:
                     swapped = True
                 current = current.next
 
-#BUBBLE DOUBLE
+#BUBBLE DOUBLE data-swap
 class DoublyNode:
     def __init__(self, data):
         self.data = data
@@ -89,5 +94,85 @@ class DoublyLinkedList:
                 current = current.next
 
 
+# sinlge libked pointer swap
+    def bubble_sort_pointer_swap(self):
+        """Sortira listu silazno koristeći zamjenu pokazivača (pointer swap)."""
+        if self.head is None or self.head.next is None:
+            return
+        
+        swapped = True
+        while swapped:
+            swapped = False
+            current = self.head
+            prev = None  # Prati čvor koji se nalazi ispred 'current'
+            
+            while current.next is not None:
+                next_node = current.next
+                
+                # Silazni poredak
+                if current.data < next_node.data:
+                    swapped = True
+                    
+                    # PRESPOJAVANJE POKAZIVAČA:
+                    current.next = next_node.next
+                    next_node.next = current
+                    
+                    # Ako smo mijenjali prva dva čvora u listi, moramo ažurirati 'self.head'
+                    if prev is None:
+                        self.head = next_node
+                    else:
+                        prev.next = next_node
+                    
+                    # Nakon zamjene, čvorovi su zamijenili mjesta u memoriji.
+                    # 'next_node' je sada ispred 'current', pa 'prev' postaje 'next_node'.
+                    prev = next_node
+                    # current ostaje isti (sada je iza next_node)
+                else:
+                    # Ako nije bilo zamjene, samo pomičemo oba pokazivača naprijed
+                    prev = current
+                    current = current.next
+                    
+# double poniter sawp
+    def bubble_sort_pointer_swap(self):
+        """Sortira dvostruko povezanu listu silazno koristeći zamjenu pokazivača (pointer swap)."""
+        if self.head is None or self.head.next is None:
+            return
+        
+        swapped = True
+        while swapped:
+            swapped = False
+            current = self.head
+            
+            while current.next is not None:
+                next_node = current.next
+                
+                # Silazni poredak
+                if current.data < next_node.data:
+                    swapped = True
+                    
+                    # 1. Spremamo vanjske susjede ovog para (ako postoje)
+                    lijevi_susjed = current.prev
+                    desni_susjed = next_node.next
+                    
+                    # 2. Međusobno prespajamo naša dva čvora (mijenjaju mjesta)
+                    next_node.next = current
+                    current.prev = next_node
+                    
+                    # 3. Spajamo ih s ostatkom liste (lijevo i desno)
+                    current.next = desni_susjed
+                    if desni_susjed is not None:
+                        desni_susjed.prev = current
+                        
+                    next_node.prev = lijevi_susjed
+                    if lijevi_susjed is not None:
+                        lijevi_susjed.next = next_node
+                    else:
+                        # Ako s lijeve strane nema nikoga, 'next_node' je postao novi početak liste!
+                        self.head = next_node
+                    
+                    # Budući da je current otišao desno, a petlja na kraju kruga radi 'current = current.next',
+                    # on bi preskočio jedan čvor. Zato ga ovdje ne pomičemo, nego ostaje isti.
+                else:
+                    current = current.next
 
 
