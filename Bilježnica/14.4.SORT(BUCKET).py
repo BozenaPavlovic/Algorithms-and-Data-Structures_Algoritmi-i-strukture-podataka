@@ -1,5 +1,8 @@
 ARR
-
+Singly-linked: pointer
+Doubly-linked: pointer
+Singly-linked: data swap
+Doubly-linked: data swap
 
 
 # BUCKET SORT ARR
