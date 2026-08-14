@@ -1,10 +1,9 @@
-Array (in-place, Lomuto pivot = arr[high])
-Array (functional, pivot = last, left + pivot + right)
-SLL (data-swap, pivot = head, swap .data)
-SLL (pointer-swap, pivot = head, detach & concat nodes)
-DLL (data-swap, pivot = head, swap .data)
-DLL (pointer-swap, pivot = head, detach & concat, update .prev/.next)
-
+QUICK SORT Array (in-place)
+QUICK SORT_2 Array (not in place)
+QUICK SORT SLL data-swap
+QUICK SORT SLL pointer-swap
+QUICK SORT DLL data-swap
+QUICK SORT DLL pointer-swap
 
 # QUICK SORT ARR
 def quick_sort(arr, low, high):
