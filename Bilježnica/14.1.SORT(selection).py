@@ -4,8 +4,8 @@ Singly-linked — pointer
 Singly-linked — data-swap
 Singly-linked — class method: SLL_class
     
--linked — pointer
-Singly-linked — data-swap
+Doubly-linked — pointer
+Doubly-linked — data-swap
 Doubly-linked — DLL_class
 
 
@@ -162,7 +162,60 @@ def delete_last(self):
         self.head = sorted_list.head
         self.tail = sorted_list.tail
         self.size = sorted_list.size
+
+
+# SELECTION DOUBLE pointer
+class DoublyNode:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+def split_list_double_pointers(head):
+    slow = head
+    fast = head.next
+    
+    while fast is not None and fast.next is not None:
+        slow = slow.next
+        fast = fast.next.next
         
+    mid = slow.next
+    slow.next = None  # Prekid prednje veze
+    if mid is not None:
+        mid.prev = None  # 🟢 DODATAK ZA DVOSTRUKU: Prekid stražnje veze
+    return mid
+
+def merge_double_pointers(left, right):
+    """Spaja dvije sortirane dvostruke liste i obnavlja .prev veze."""
+    if left is None: return right
+    if right is None: return left
+    
+    if left.data <= right.data:
+        result = left
+        result.next = merge_double_pointers(left.next, right)
+        if result.next is not None:
+            result.next.prev = result  # 🟢 DODATAK ZA DVOSTRUKU (veza unazad)
+        result.prev = None
+    else:
+        result = right
+        result.next = merge_double_pointers(left, right.next)
+        if result.next is not None:
+            result.next.prev = result  # 🟢 DODATAK ZA DVOSTRUKU (veza unazad)
+        result.prev = None
+    return result
+
+def merge_sort_double_pointers(head):
+    if head is None or head.next is None:
+        return head
+        
+    mid = split_list_double_pointers(head)
+    
+    left_sorted = merge_sort_double_pointers(head)
+    right_sorted = merge_sort_double_pointers(mid)
+    
+    return merge_double_pointers(left_sorted, right_sorted)
+
+       
 # SELECTION DOUBLE data sawp
 class DoublyNode:
     def __init__(self, data):
@@ -220,57 +273,6 @@ def merge_sort_double_data(head):
         
     return head
     
-# SELECTION DOUBLE pointer
-class DoublyNode:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
-        self.prev = None
-
-def split_list_double_pointers(head):
-    slow = head
-    fast = head.next
-    
-    while fast is not None and fast.next is not None:
-        slow = slow.next
-        fast = fast.next.next
-        
-    mid = slow.next
-    slow.next = None  # Prekid prednje veze
-    if mid is not None:
-        mid.prev = None  # 🟢 DODATAK ZA DVOSTRUKU: Prekid stražnje veze
-    return mid
-
-def merge_double_pointers(left, right):
-    """Spaja dvije sortirane dvostruke liste i obnavlja .prev veze."""
-    if left is None: return right
-    if right is None: return left
-    
-    if left.data <= right.data:
-        result = left
-        result.next = merge_double_pointers(left.next, right)
-        if result.next is not None:
-            result.next.prev = result  # 🟢 DODATAK ZA DVOSTRUKU (veza unazad)
-        result.prev = None
-    else:
-        result = right
-        result.next = merge_double_pointers(left, right.next)
-        if result.next is not None:
-            result.next.prev = result  # 🟢 DODATAK ZA DVOSTRUKU (veza unazad)
-        result.prev = None
-    return result
-
-def merge_sort_double_pointers(head):
-    if head is None or head.next is None:
-        return head
-        
-    mid = split_list_double_pointers(head)
-    
-    left_sorted = merge_sort_double_pointers(head)
-    right_sorted = merge_sort_double_pointers(mid)
-    
-    return merge_double_pointers(left_sorted, right_sorted)
-
 
 # SELECTION DOUBLE - DLL_class ( i have full calss write speratly is just really big and stuff) 
 class Node:
