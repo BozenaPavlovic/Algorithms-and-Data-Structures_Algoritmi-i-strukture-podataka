@@ -29,10 +29,10 @@ def bubble_sort(arr):
     while swapped:
         swapped = False
         for i in range(1, n):
-            if arr[i-1] > arr[i]:
+            if arr[i-1] > arr[i]:    # ascending order (flip sign for descending )
                 arr[i-1], arr[i] = arr[i], arr[i-1] # zamjena elemenata
                 swapped = True
-        if not swapped:
+        if not swapped: 
             break
     return arr
   
@@ -59,7 +59,7 @@ class SingleLinkedList:
             while current.next is not None:
                 next_node = current.next
                 # Silazni poredak: ako je trenutni manji od idućeg, mijenjaj podatke
-                if current.data < next_node.data:
+                if current.data < next_node.data: # descending
                     current.data, next_node.data = next_node.data, current.data
                     swapped = True
                 current = current.next
@@ -79,12 +79,10 @@ class DoublyLinkedList:
         """Sortira dvostruko povezanu listu silazno koristeći zamjenu podataka (data swap)."""
         if self.head is None or self.head.next is None:
             return
-        
         swapped = True
         while swapped:
             swapped = False
             current = self.head
-            
             while current.next is not None:
                 next_node = current.next
                 # Silazni poredak: ako je trenutni manji od idućeg, mijenjaj podatke
@@ -145,34 +143,29 @@ class DoublyLinkedList:
             
             while current.next is not None:
                 next_node = current.next
-                
-                # Silazni poredak
-                if current.data < next_node.data:
+                if current.data < next_node.data:   # descending
                     swapped = True
-                    
-                    # 1. Spremamo vanjske susjede ovog para (ako postoje)
-                    lijevi_susjed = current.prev
-                    desni_susjed = next_node.next
-                    
-                    # 2. Međusobno prespajamo naša dva čvora (mijenjaju mjesta)
+                    left = current.prev
+                    right = next_node.next
+
+                    # put next_node before current
                     next_node.next = current
                     current.prev = next_node
-                    
-                    # 3. Spajamo ih s ostatkom liste (lijevo i desno)
-                    current.next = desni_susjed
-                    if desni_susjed is not None:
-                        desni_susjed.prev = current
-                        
-                    next_node.prev = lijevi_susjed
-                    if lijevi_susjed is not None:
-                        lijevi_susjed.next = next_node
+
+                    # connect current to right
+                    current.next = right
+                    if right is not None:
+                        right.prev = current
+
+                    # connect next_node to left
+                    next_node.prev = left
+                    if left is not None:
+                        left.next = next_node
                     else:
-                        # Ako s lijeve strane nema nikoga, 'next_node' je postao novi početak liste!
+                        # next_node becomes new head
                         self.head = next_node
-                    
-                    # Budući da je current otišao desno, a petlja na kraju kruga radi 'current = current.next',
-                    # on bi preskočio jedan čvor. Zato ga ovdje ne pomičemo, nego ostaje isti.
+
+                    # advance current to the node after the swapped current
+                    current = current.next
                 else:
                     current = current.next
-
-
