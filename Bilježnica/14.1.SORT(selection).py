@@ -138,20 +138,18 @@ def delete_last(self):
 
     def find_max(self):
         if self.head is None:
-            print("List is empty.")
             return None, None
         mx_idx = 0
         mx = self.head.data
-        current = self.head
+        cur = self.head
         idx = 0
-        while current:
-            if current.data > mx:
-                mx = current.data
+        while cur:
+            if cur.data > mx:
+                mx = cur.data
                 mx_idx = idx
-            current = current.next
+            cur = cur.next
             idx += 1
         return mx_idx, mx
-    
         
     def selection_sort(self):
         sorted_list = SLL_class()
@@ -357,17 +355,16 @@ def delete_last(self):
 
     def find_max(self):
         if self.head is None:
-            print("List is empty.")
             return None, None
         mx_idx = 0
         mx = self.head.data
-        current = self.head
+        cur = self.head
         idx = 0
-        while current:
-            if current.data > mx:
-                mx = current.data
+        while cur:
+            if cur.data > mx:
+                mx = cur.data
                 mx_idx = idx
-            current = current.next
+            cur = cur.next
             idx += 1
         return mx_idx, mx
 
