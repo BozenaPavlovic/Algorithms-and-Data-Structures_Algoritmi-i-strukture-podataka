@@ -133,3 +133,67 @@ class Solution(object):
         else:
             curr.next = list1
         return dummy.next
+
+
+19. Remove Nth Node From End of List 
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def removeNthFromEnd(self, head, n):
+        if head is None:
+            return None
+
+        dummy = ListNode(0)
+        dummy.next = head
+        fast = dummy
+        slow = dummy
+        for i in range(n):
+            fast = fast.next
+        while fast.next is not None:
+            fast = fast.next
+            slow = slow.next
+        slow.next = slow.next.next
+        
+        return dummy.next
+
+2. Add Two Numbers
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        
+        carry = 0
+        dummy = ListNode()
+        curr = dummy
+        while l1 is not None or l2 is not None:
+
+            if l1 is not None:
+                x = l1.val
+                l1 = l1.next
+            else:
+                x = 0
+
+            if l2 is not None:
+                y = l2.val
+                l2 = l2.next
+            else:
+                y = 0
+
+            result = x + y + carry
+
+            digit = result % 10
+            carry = result // 10
+
+            curr.next = ListNode(digit)
+            curr = curr.next
+
+        if carry != 0:
+            curr.next = ListNode(carry)
+
+        return dummy.next
