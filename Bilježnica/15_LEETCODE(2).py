@@ -12,3 +12,29 @@ Leetcode – preporučeni zadaci za vježbu
 ovisno o implementaciji
 
 
+
+
+206. Reverse Linked List — Easy
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def reverseList(self, head):
+        if head is None:
+            return None
+        curr = head
+        prev= None
+        while curr is not None:
+            curr_next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = curr_next
+
+
+
+  
+
+            
+        return prev
