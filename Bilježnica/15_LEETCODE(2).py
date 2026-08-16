@@ -30,11 +30,59 @@ class Solution(object):
             curr_next = curr.next
             curr.next = prev
             prev = curr
-            curr = curr_next
-
-
-
-  
-
-            
+            curr = curr_next   
         return prev
+#DOUBLY 
+class ListNode(object):
+    def __init__(self, val=0, next=None, prev=None):
+        self.val = val
+        self.next = next
+        self.prev = prev
+class Solution(object):
+    def reverseList(self, head):
+        curr = head
+
+        while curr is not None:
+            curr.next, curr.prev = curr.prev, curr.next
+            curr = curr.prev
+
+        return head
+
+83. Remove Duplicates from Sorted List — Easy
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def deleteDuplicates(self, head):
+        if head is None:
+            return None
+        curr = head
+        while curr is not None and curr.next is not None:
+            if curr.val == curr.next.val:
+                curr.next = curr.next.next
+            curr = curr.next
+        return head
+        
+#DOUBLY 
+class ListNode:
+    def __init__(self, val=0, next=None, prev=None):
+        self.val = val
+        self.next = next
+        self.prev = prev
+
+def deleteDuplicates(head):
+    if head is None:
+        return None
+    curr = head
+    while curr is not None and curr.next is not None:
+        if curr.val == curr.next.val:
+            curr.next = curr.next.next
+
+            if curr.next is not None:
+                curr.next.prev = curr
+        else:
+            curr = curr.next
+    return head
+        
