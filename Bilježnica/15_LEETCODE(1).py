@@ -186,3 +186,14 @@ class Solution(object):
 
         nums1.sort()
         return nums1
+
+class Solution(object):
+    def merge(self, nums1, m, nums2, n):
+        for i in nums2:
+            nums1[m] = i
+            m += 1
+
+        for i in range(len(nums1)):
+            for j in range(i + 1, len(nums1)):
+                if nums1[i] > nums1[j]:
+                    nums1[i], nums1[j] = nums1[j], nums1[i]
