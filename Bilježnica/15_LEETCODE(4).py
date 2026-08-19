@@ -75,4 +75,27 @@ class Solution(object):
 
         
 240. Search a 2D Matrix II — Medium
+# FOR LOOP
+class Solution(object):
+    def searchMatrix(self, matrix, target):
+        for row in matrix:
+            for x in row:
+                if x == target:
+                    return True
+        return False
+# REKURZIVNO
+def search(row, col):
+            if row == len(matrix):
+                return False
+
+            if col == len(matrix[0]):
+                return search(row + 1, 0)
+
+            if matrix[row][col] == target:
+                return True
+
+            return search(row, col + 1)
+
+        return search(0, 0)
+
 78. Subsets — Medium, generiranje svih podskupova
