@@ -69,45 +69,27 @@ class MinStack(object):
         
 232. Implement Queue using Stacks — Easy ▪ Rad s monotonim stogom
 class MyQueue(object):
-
     def __init__(self):
-        self.items = []
-        
+        self.stack1 = []
+        self.stack2 = []
 
     def push(self, x):
-        return self.items.append(x)
-
-        """
-        :type x: int
-        :rtype: None
-        """
-        
+        self.stack1.append(x)
 
     def pop(self):
-        if self.empty():
-            raise IndexError("IsEmpty")
-        else:
-            return self.items.pop(0)
-        """
-        :rtype: int
-        """
-        
+        if not self.stack2:
+            while self.stack1:
+                self.stack2.append(self.stack1.pop())
+        return self.stack2.pop()
 
     def peek(self):
-        if self.empty():
-            raise IndexError("IsEmpty")
-        else:
-            return self.items[0]
-        """
-        :rtype: int
-        """
-        
+        if not self.stack2:
+            while self.stack1:
+                self.stack2.append(self.stack1.pop())
+        return self.stack2[-1]
 
     def empty(self):
-        return len(self.items) == 0
-        """
-        :rtype: bool
-        """
+        return not self.stack1 and not self.stack2
 
 
 739. Daily Temperatures — Medium, koliko dana čekamo toplije?
