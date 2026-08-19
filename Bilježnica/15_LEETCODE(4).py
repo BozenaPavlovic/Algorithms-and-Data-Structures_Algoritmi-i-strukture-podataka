@@ -53,19 +53,13 @@ class Solution(object):
 #         self.next = next
 class Solution(object):
     def mergeTwoLists(self, list1, list2):
-
-        # ako je jedna lista prazna, vrati drugu
         if list1 is None:
             return list2
-
         if list2 is None:
             return list1
-
-        # uzmi manji trenutni element
         if list1.val < list2.val:
             list1.next = self.mergeTwoLists(list1.next, list2)
             return list1
-
         else:
             list2.next = self.mergeTwoLists(list1, list2.next)
             return list2
