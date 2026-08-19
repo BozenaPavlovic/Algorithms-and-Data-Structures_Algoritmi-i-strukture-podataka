@@ -100,19 +100,24 @@ class Solution(object):
                     return True
         return False
 # REKURZIVNO
-def search(row, col):
-            if row == len(matrix):
-                return False
+class Solution(object):
+    def searchMatrix(self, matrix, target):
+        rows = len(matrix)
+        cols = len(matrix[0])
 
-            if col == len(matrix[0]):
-                return search(row + 1, 0)
+        def search(row, col):
+            if row == rows or col < 0:
+                return False
 
             if matrix[row][col] == target:
                 return True
 
-            return search(row, col + 1)
+            if matrix[row][col] > target:
+                return search(row, col - 1)
 
-        return search(0, 0)
+            return search(row + 1, col)
+
+        return search(0, cols - 1)
 
 78. Subsets — Medium, generiranje svih podskupova
 class Solution(object):
