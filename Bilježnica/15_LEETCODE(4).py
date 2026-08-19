@@ -65,6 +65,7 @@ class Solution(object):
             return list2
             
 50. Pow(x, n) — Medium, brzo vs. sporo potenciranje rekurzijom
+# 1. Spori način → linearni O(n)
 class Solution(object):
     def myPow(self, x, n):
         if n == 0:
@@ -72,7 +73,22 @@ class Solution(object):
         if n < 0:
             return 1 / self.myPow(x,-n)
         return x * self.myPow(x,n-1)
+# 2. Brzi način → logaritamski O(log n)
+class Solution(object):
+    def myPow(self, x, n):
+        if n == 0:
+            return 1
 
+        if n < 0:
+            return 1 / self.myPow(x, -n)
+
+        half = self.myPow(x, n // 2)
+
+        if n % 2 == 0:
+            return half * half
+        else:
+            return half * half * x
+            
         
 240. Search a 2D Matrix II — Medium
 # FOR LOOP
