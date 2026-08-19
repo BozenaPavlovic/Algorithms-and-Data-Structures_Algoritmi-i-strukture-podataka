@@ -99,3 +99,19 @@ def search(row, col):
         return search(0, 0)
 
 78. Subsets — Medium, generiranje svih podskupova
+class Solution(object):
+    def subsets(self, nums):
+        result = []
+        current = []
+
+        def backtrack(i):
+            result.append(current[:])
+
+            for j in range(i, len(nums)):
+                current.append(nums[j])
+                backtrack(j + 1)
+                current.pop()
+
+        backtrack(0)
+
+        return result
