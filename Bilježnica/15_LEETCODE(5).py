@@ -86,14 +86,14 @@ class Solution(object):
 # Output: [1, 2, 3]
 class Solution(object):
     def topKFrequent(self, nums, k):
-        mapso = {}
+        count = {}
+
         for num in nums:
-            if num in mapso:
-                mapso[num] += 1
+            if num in count:
+                count[num] += 1
             else:
-                mapso[num] = 1
-        sorted_items = sorted(mapso.items(), key=lambda x: x[1], reverse=True)
-        result=[]
-        for i in range (k):
-            result.append(sorted_items[i][0])
-        return result
+                count[num] = 1
+
+        sorted_items = sorted(count.items(), key=lambda x: x[1], reverse=True)
+
+        return [x[0] for x in sorted_items[:k]]
